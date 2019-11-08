@@ -1,0 +1,839 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 8.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       157,          7]
+NotebookDataLength[     33643,        831]
+NotebookOptionsPosition[     31547,        769]
+NotebookOutlinePosition[     32171,        794]
+CellTagsIndexPosition[     32128,        791]
+WindowTitle->Ellipsoid - Source
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+Cell["Ellipsoid", "Section",
+ CellFrame->{{0, 0}, {0, 0}},
+ ShowCellBracket->False,
+ FontColor->RGBColor[
+  0.597406, 0, 
+   0.0527047],ExpressionUUID->"a923b622-08de-4581-9531-7cb57c42eac1"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ GraphicsBox[RasterBox[CompressedData["
+1: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
+FP/69esnAAAAAAAAAAAAwM74B4thROM=
+   "], {{0, 0}, {1800, 25}}, {0, 255},
+   ColorFunction->RGBColor],
+  ImageSize->{1800, 25},
+  PlotRange->{{0, 1800}, {0, 25}}]], "Section",
+ CellFrame->{{0, 0}, {0, 0}},
+ ShowCellBracket->
+  False,ExpressionUUID->"6d9bbf1d-d9cf-4e56-95a9-e78643e75ee7"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"Manipulate", "[", 
+  RowBox[{
+   RowBox[{"Show", "[", 
+    RowBox[{
+     RowBox[{"Graphics3D", "[", 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"GrayLevel", "[", ".5", "]"}], ",", 
+        RowBox[{"Cylinder", "[", 
+         RowBox[{
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"{", 
+             RowBox[{"0", ",", 
+              RowBox[{"-", "100"}], ",", "0"}], "}"}], ",", 
+            RowBox[{"{", 
+             RowBox[{"0", ",", "100", ",", "0"}], "}"}]}], "}"}], ",", 
+          ".03"}], "]"}], ",", 
+        RowBox[{"Cylinder", "[", 
+         RowBox[{
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"{", 
+             RowBox[{
+              RowBox[{"-", "100"}], ",", "0", ",", "0"}], "}"}], ",", 
+            RowBox[{"{", 
+             RowBox[{"100", ",", "0", ",", "0"}], "}"}]}], "}"}], ",", 
+          ".03"}], "]"}], ",", 
+        RowBox[{"Cylinder", "[", 
+         RowBox[{
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"{", 
+             RowBox[{"0", ",", "0", ",", 
+              RowBox[{"-", "100"}]}], "}"}], ",", 
+            RowBox[{"{", 
+             RowBox[{"0", ",", "0", ",", "100"}], "}"}]}], "}"}], ",", 
+          ".03"}], "]"}]}], "}"}], "]"}], ",", 
+     RowBox[{"ContourPlot3D", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{
+         RowBox[{"x", "^", "2"}], "/", 
+         RowBox[{"a", "^", "2"}]}], "+", 
+        RowBox[{
+         RowBox[{"y", "^", "2"}], "/", 
+         RowBox[{"b", "^", "2"}]}], "+", 
+        RowBox[{
+         RowBox[{"z", "^", "2"}], "/", 
+         RowBox[{"c", "^", "2"}]}]}], ",", 
+       RowBox[{"{", 
+        RowBox[{"x", ",", 
+         RowBox[{"-", "3"}], ",", "3"}], "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"y", ",", 
+         RowBox[{"-", "3"}], ",", "3"}], "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"z", ",", 
+         RowBox[{"-", "3"}], ",", "3"}], "}"}], ",", 
+       RowBox[{"Contours", "\[Rule]", 
+        RowBox[{"{", "1", "}"}]}], ",", 
+       RowBox[{"MeshStyle", "\[Rule]", "Gray"}], ",", 
+       RowBox[{"ContourStyle", "\[Rule]", 
+        RowBox[{"{", 
+         RowBox[{"{", 
+          RowBox[{"Orange", ",", 
+           RowBox[{"Specularity", "[", 
+            RowBox[{"White", ",", "20"}], "]"}]}], "}"}], "}"}]}], ",", 
+       RowBox[{"PlotPoints", "\[Rule]", "15"}]}], "]"}], ",", 
+     RowBox[{"Background", "\[Rule]", "Black"}], ",", 
+     RowBox[{"Boxed", "\[Rule]", "False"}], ",", 
+     RowBox[{"Axes", "\[Rule]", "None"}], ",", 
+     RowBox[{"AxesStyle", "\[Rule]", "White"}], ",", 
+     RowBox[{"Lighting", "\[Rule]", 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{"\"\<Ambient\>\"", ",", 
+          RowBox[{"GrayLevel", "[", ".3", "]"}]}], "}"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"\"\<Directional\>\"", ",", "White", ",", 
+          RowBox[{"ImageScaled", "[", 
+           RowBox[{"{", 
+            RowBox[{"1", ",", "1", ",", "1"}], "}"}], "]"}]}], "}"}]}], 
+       "}"}]}], ",", 
+     RowBox[{"ImageSize", "\[Rule]", 
+      RowBox[{"{", 
+       RowBox[{"500", ",", "357"}], "}"}]}], ",", 
+     RowBox[{"PlotRange", "\[Rule]", 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{"-", "3"}], ",", "3"}], "}"}], ",", 
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{"-", "3"}], ",", "3"}], "}"}], ",", 
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{"-", "3"}], ",", "3"}], "}"}]}], "}"}]}], ",", 
+     RowBox[{"SphericalRegion", "\[Rule]", "True"}], ",", 
+     RowBox[{"ViewAngle", "\[Rule]", 
+      RowBox[{"\[Pi]", "/", "10"}]}], ",", 
+     RowBox[{"ImagePadding", "\[Rule]", 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{"0", ",", "0"}], "}"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"0", ",", "40"}], "}"}]}], "}"}]}]}], "]"}], ",", 
+   "\[IndentingNewLine]", "\"\<lengths of semi-axes\>\"", ",", 
+   "\[IndentingNewLine]", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"a", ",", "2", ",", "\"\<a\>\""}], "}"}], ",", "1", ",", "3", 
+     ",", 
+     RowBox[{"Appearance", "\[Rule]", "\"\<Labeled\>\""}]}], "}"}], ",", 
+   "\[IndentingNewLine]", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"b", ",", "2", ",", "\"\<b\>\""}], "}"}], ",", "1", ",", "3", 
+     ",", 
+     RowBox[{"Appearance", "\[Rule]", "\"\<Labeled\>\""}]}], "}"}], ",", 
+   "\[IndentingNewLine]", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"c", ",", "1", ",", "\"\<c\>\""}], "}"}], ",", "1", ",", "3", 
+     ",", 
+     RowBox[{"Appearance", "\[Rule]", "\"\<Labeled\>\""}]}], "}"}]}], 
+  "]"}]], "Input",
+ CellChangeTimes->{
+  3.35258525564063*^9, {3.35258531753125*^9, 3.35258531809375*^9}, {
+   3.35272031737419*^9, 3.35272033215535*^9}, {3.35315376331212*^9, 
+   3.35315376743752*^9}, {3.35344403940625*^9, 3.3534441425625*^9}, {
+   3.3534442625625*^9, 3.35344426465625*^9}, {3.35344454392188*^9, 
+   3.35344454464063*^9}, {3.3534447636875*^9, 3.35344477270313*^9}, {
+   3.35344513195313*^9, 3.35344513501563*^9}, {3.353445343375*^9, 
+   3.35344536282813*^9}, {3.35359063145313*^9, 3.35359063503125*^9}, {
+   3.35452895936577*^9, 3.35452900659954*^9}, {3.35452984930751*^9, 
+   3.35452985546368*^9}, {3.35540150559375*^9, 3.35540156745313*^9}, {
+   3.35540191773438*^9, 3.35540193129688*^9}, {3.35550394662199*^9, 
+   3.35550395155949*^9}, {3.35550399477824*^9, 3.35550405632511*^9}, {
+   3.35550410463761*^9, 3.35550411632511*^9}, {3.35620796015625*^9, 
+   3.35620802859375*^9}, {3.3562080683125*^9, 3.35620808982813*^9}, {
+   3.35731768254372*^9, 3.35731770009161*^9}, {3.35731794097896*^9, 
+   3.3573180960494*^9}, {3.35731813567643*^9, 3.35731817703792*^9}, {
+   3.35749199152794*^9, 3.35749204682482*^9}, {3.35749209641857*^9, 
+   3.35749216434044*^9}, {3.35749222937169*^9, 3.35749225119982*^9}, {
+   3.35828993765625*^9, 3.35828995789063*^9}, {3.36278339151563*^9, 
+   3.36278339192188*^9}, {3.36311274962007*^9, 3.36311279718197*^9}, {
+   3.36311302014786*^9, 3.36311305075684*^9}, {3.36312023988357*^9, 
+   3.3631202668051*^9}, {3.36312030021093*^9, 3.36312031989817*^9}, {
+   3.36312043339672*^9, 3.3631205049583*^9}, {3.3667201746237*^9, 
+   3.3667202487951*^9}, 3.36672040126288*^9, {3.36854314899145*^9, 
+   3.36854317655377*^9}, {3.3751885497474413`*^9, 3.3751885584360533`*^9}, {
+   3.380384237484375*^9, 3.380384283125*^9}, {3.380384935109375*^9, 
+   3.380384935328125*^9}, {3.3810629233568764`*^9, 3.3810629239975014`*^9}, {
+   3.504961482402507*^9, 3.5049614887677617`*^9}},
+ CellID->1496021318,ExpressionUUID->"4e268061-f161-47c0-b2e7-d12a48486226"],
+
+Cell[BoxData[
+ TagBox[
+  StyleBox[
+   DynamicModuleBox[{$CellContext`a$$ = 2, $CellContext`b$$ = 
+    2, $CellContext`c$$ = 1.9756656646728534`, Typeset`show$$ = True, 
+    Typeset`bookmarkList$$ = {}, Typeset`bookmarkMode$$ = "Autorun", 
+    Typeset`animator$$ = AnimatorBox[
+     Dynamic[
+     Typeset`animvar$$, (
+      Typeset`animvar$$ = #; {$CellContext`a$$, $CellContext`b$$, \
+$CellContext`c$$} = Through[
+         Manipulate`Dump`flis1$4057[Typeset`animvar$$]])& ], {0, 12}, 
+     ImageSize -> Small, DefaultDuration -> 12, AnimationRate -> Automatic, 
+     AppearanceElements -> {
+      "ProgressSlider", "PlayPauseButton", "FasterSlowerButtons", 
+       "DirectionButton"}], Typeset`animvar$$ = 9.146388053894043, 
+    Typeset`name$$ = "\"untitled\"", Typeset`specs$$ = {{
+      Hold["lengths of semi-axes"], Manipulate`Dump`ThisIsNotAControl}, {{
+       Hold[$CellContext`a$$], 2, "a"}, 1, 3}, {{
+       Hold[$CellContext`b$$], 2, "b"}, 1, 3}, {{
+       Hold[$CellContext`c$$], 1, "c"}, 1, 3}}, Typeset`size$$ = {
+    500., {176., 181.}}, Typeset`update$$ = 0, Typeset`initDone$$, 
+    Typeset`skipInitDone$$ = True, $CellContext`a$21879$$ = 
+    0, $CellContext`b$21880$$ = 0, $CellContext`c$21881$$ = 0}, 
+    DynamicBox[Manipulate`ManipulateBoxes[
+     1, StandardForm, 
+      "Variables" :> {$CellContext`a$$ = 2, $CellContext`b$$ = 
+        2, $CellContext`c$$ = 1}, "ControllerVariables" :> {
+        Hold[$CellContext`a$$, $CellContext`a$21879$$, 0], 
+        Hold[$CellContext`b$$, $CellContext`b$21880$$, 0], 
+        Hold[$CellContext`c$$, $CellContext`c$21881$$, 0]}, 
+      "OtherVariables" :> {
+       Typeset`show$$, Typeset`bookmarkList$$, Typeset`bookmarkMode$$, 
+        Typeset`animator$$, Typeset`animvar$$, Typeset`name$$, 
+        Typeset`specs$$, Typeset`size$$, Typeset`update$$, Typeset`initDone$$,
+         Typeset`skipInitDone$$}, "Body" :> Show[
+        Graphics3D[{
+          GrayLevel[0.5], 
+          Cylinder[{{0, -100, 0}, {0, 100, 0}}, 0.03], 
+          Cylinder[{{-100, 0, 0}, {100, 0, 0}}, 0.03], 
+          Cylinder[{{0, 0, -100}, {0, 0, 100}}, 0.03]}], 
+        ContourPlot3D[$CellContext`x^2/$CellContext`a$$^2 + \
+$CellContext`y^2/$CellContext`b$$^2 + $CellContext`z^2/$CellContext`c$$^2, \
+{$CellContext`x, -3, 3}, {$CellContext`y, -3, 3}, {$CellContext`z, -3, 3}, 
+         Contours -> {1}, MeshStyle -> Gray, ContourStyle -> {{Orange, 
+            Specularity[White, 20]}}, PlotPoints -> 15], Background -> Black, 
+        Boxed -> False, Axes -> None, AxesStyle -> White, 
+        Lighting -> {{"Ambient", 
+           GrayLevel[0.3]}, {"Directional", White, 
+           ImageScaled[{1, 1, 1}]}}, ImageSize -> {500, 357}, 
+        PlotRange -> {{-3, 3}, {-3, 3}, {-3, 3}}, SphericalRegion -> True, 
+        ViewAngle -> Pi/10, ImagePadding -> {{0, 0}, {0, 40}}], 
+      "Specifications" :> {
+       "lengths of semi-axes", {{$CellContext`a$$, 2, "a"}, 1, 3, Appearance -> 
+         "Labeled"}, {{$CellContext`b$$, 2, "b"}, 1, 3, Appearance -> 
+         "Labeled"}, {{$CellContext`c$$, 1, "c"}, 1, 3, Appearance -> 
+         "Labeled"}}, "Options" :> {}, 
+      "DefaultOptions" :> {ControllerLinking -> True}],
+     ImageSizeCache->{551., {289., 295.}},
+     SingleEvaluation->True],
+    Deinitialization:>None,
+    DynamicModuleValues:>{},
+    SynchronousInitialization->True,
+    UnsavedVariables:>{Typeset`initDone$$},
+    UntrackedVariables:>{Typeset`size$$}], "Manipulate",
+   Deployed->True,
+   StripOnInput->False],
+  Manipulate`InterpretManipulate[1]]], "Output",
+ CellID->161028398,ExpressionUUID->"5fe2ad87-0595-4f5a-b78c-96c7feb3a088"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"\[IndentingNewLine]", "\[IndentingNewLine]", 
+  RowBox[{"Manipulate", "[", 
+   RowBox[{
+    RowBox[{"Show", "[", 
+     RowBox[{
+      RowBox[{"Graphics3D", "[", 
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"GrayLevel", "[", ".5", "]"}], ",", 
+         RowBox[{"Cylinder", "[", 
+          RowBox[{
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"{", 
+              RowBox[{"0", ",", 
+               RowBox[{"-", "100"}], ",", "0"}], "}"}], ",", 
+             RowBox[{"{", 
+              RowBox[{"0", ",", "100", ",", "0"}], "}"}]}], "}"}], ",", 
+           ".03"}], "]"}], ",", 
+         RowBox[{"Cylinder", "[", 
+          RowBox[{
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"{", 
+              RowBox[{
+               RowBox[{"-", "100"}], ",", "0", ",", "0"}], "}"}], ",", 
+             RowBox[{"{", 
+              RowBox[{"100", ",", "0", ",", "0"}], "}"}]}], "}"}], ",", 
+           ".03"}], "]"}], ",", 
+         RowBox[{"Cylinder", "[", 
+          RowBox[{
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"{", 
+              RowBox[{"0", ",", "0", ",", 
+               RowBox[{"-", "100"}]}], "}"}], ",", 
+             RowBox[{"{", 
+              RowBox[{"0", ",", "0", ",", "100"}], "}"}]}], "}"}], ",", 
+           ".03"}], "]"}]}], "}"}], "]"}], ",", 
+      RowBox[{"ContourPlot3D", "[", 
+       RowBox[{
+        RowBox[{
+         RowBox[{
+          RowBox[{"x", "^", "2"}], "/", 
+          RowBox[{"a", "^", "2"}]}], "+", 
+         RowBox[{
+          RowBox[{"y", "^", "2"}], "/", 
+          RowBox[{"b", "^", "2"}]}], "+", 
+         RowBox[{
+          RowBox[{"z", "^", "2"}], "/", 
+          RowBox[{"c", "^", "2"}]}]}], ",", 
+        RowBox[{"{", 
+         RowBox[{"x", ",", 
+          RowBox[{"-", "3"}], ",", "3"}], "}"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"y", ",", 
+          RowBox[{"-", "3"}], ",", "3"}], "}"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"z", ",", 
+          RowBox[{"-", "3"}], ",", "3"}], "}"}], ",", " ", 
+        RowBox[{"Contours", "\[Rule]", " ", 
+         RowBox[{"{", 
+          RowBox[{
+          ".01", ",", " ", ".05", ",", " ", ".1", ",", " ", ".25", ",", " ", 
+           ".5", ",", " ", "1"}], "}"}]}], ",", " ", 
+        RowBox[{"MeshStyle", "\[Rule]", "None"}], ",", 
+        RowBox[{"ContourStyle", "\[Rule]", 
+         RowBox[{"{", 
+          RowBox[{
+           RowBox[{"{", 
+            RowBox[{"Red", ",", 
+             RowBox[{"Specularity", "[", 
+              RowBox[{"White", ",", "20"}], "]"}], ",", " ", 
+             RowBox[{"Opacity", "[", "1", "]"}]}], "}"}], ",", " ", 
+           RowBox[{"{", 
+            RowBox[{"Blue", ",", 
+             RowBox[{"Specularity", "[", 
+              RowBox[{"White", ",", "20"}], "]"}], ",", " ", 
+             RowBox[{"Opacity", "[", ".5", "]"}]}], "}"}], ",", " ", 
+           RowBox[{"{", 
+            RowBox[{"Red", ",", 
+             RowBox[{"Specularity", "[", 
+              RowBox[{"White", ",", "20"}], "]"}], ",", " ", 
+             RowBox[{"Opacity", "[", ".4", "]"}]}], "}"}], ",", " ", 
+           RowBox[{"{", 
+            RowBox[{"Orange", ",", 
+             RowBox[{"Specularity", "[", 
+              RowBox[{"White", ",", "20"}], "]"}], ",", " ", 
+             RowBox[{"Opacity", "[", ".3", "]"}]}], "}"}], ",", " ", 
+           RowBox[{"{", 
+            RowBox[{"Green", ",", 
+             RowBox[{"Specularity", "[", 
+              RowBox[{"White", ",", "20"}], "]"}], ",", " ", 
+             RowBox[{"Opacity", "[", ".2", "]"}]}], "}"}], ",", " ", 
+           RowBox[{"{", 
+            RowBox[{"Yellow", ",", 
+             RowBox[{"Specularity", "[", 
+              RowBox[{"White", ",", "20"}], "]"}], ",", " ", 
+             RowBox[{"Opacity", "[", ".1", "]"}]}], "}"}]}], "}"}]}], ",", 
+        RowBox[{"PlotPoints", "\[Rule]", "15"}]}], "]"}], ",", 
+      RowBox[{"Background", "\[Rule]", "Black"}], ",", 
+      RowBox[{"Boxed", "\[Rule]", "False"}], ",", 
+      RowBox[{"Axes", "\[Rule]", "None"}], ",", 
+      RowBox[{"AxesStyle", "\[Rule]", "White"}], ",", 
+      RowBox[{"Lighting", "\[Rule]", 
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{"\"\<Ambient\>\"", ",", 
+           RowBox[{"GrayLevel", "[", ".3", "]"}]}], "}"}], ",", 
+         RowBox[{"{", 
+          RowBox[{"\"\<Directional\>\"", ",", "White", ",", 
+           RowBox[{"ImageScaled", "[", 
+            RowBox[{"{", 
+             RowBox[{"1", ",", "1", ",", "1"}], "}"}], "]"}]}], "}"}]}], 
+        "}"}]}], ",", 
+      RowBox[{"ImageSize", "\[Rule]", 
+       RowBox[{"{", 
+        RowBox[{"500", ",", "357"}], "}"}]}], ",", 
+      RowBox[{"PlotRange", "\[Rule]", 
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{
+           RowBox[{"-", "3"}], ",", "3"}], "}"}], ",", 
+         RowBox[{"{", 
+          RowBox[{
+           RowBox[{"-", "3"}], ",", "3"}], "}"}], ",", 
+         RowBox[{"{", 
+          RowBox[{
+           RowBox[{"-", "3"}], ",", "3"}], "}"}]}], "}"}]}], ",", 
+      RowBox[{"SphericalRegion", "\[Rule]", "True"}], ",", 
+      RowBox[{"ViewAngle", "\[Rule]", 
+       RowBox[{"\[Pi]", "/", "10"}]}], ",", 
+      RowBox[{"ImagePadding", "\[Rule]", 
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{"0", ",", "0"}], "}"}], ",", 
+         RowBox[{"{", 
+          RowBox[{"0", ",", "40"}], "}"}]}], "}"}]}]}], "]"}], ",", 
+    "\[IndentingNewLine]", "\"\<lengths of semi-axes\>\"", ",", 
+    "\[IndentingNewLine]", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"a", ",", "2", ",", "\"\<a\>\""}], "}"}], ",", "1", ",", "3", 
+      ",", 
+      RowBox[{"Appearance", "\[Rule]", "\"\<Labeled\>\""}]}], "}"}], ",", 
+    "\[IndentingNewLine]", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"b", ",", "2", ",", "\"\<b\>\""}], "}"}], ",", "1", ",", "3", 
+      ",", 
+      RowBox[{"Appearance", "\[Rule]", "\"\<Labeled\>\""}]}], "}"}], ",", 
+    "\[IndentingNewLine]", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"c", ",", "1", ",", "\"\<c\>\""}], "}"}], ",", "1", ",", "3", 
+      ",", 
+      RowBox[{"Appearance", "\[Rule]", "\"\<Labeled\>\""}]}], "}"}]}], "]"}]}]
+  ], "Input",
+ CellChangeTimes->{{3.7821022144521856`*^9, 3.782102282908367*^9}, {
+  3.7821023563879085`*^9, 3.7821023567998505`*^9}, {3.7821025879547496`*^9, 
+  3.7821026046979923`*^9}, {3.782102893724128*^9, 3.7821028981034203`*^9}, {
+  3.7821030462256775`*^9, 3.782103050617935*^9}, {3.782103131037919*^9, 
+  3.782103144896431*^9}, {3.7821031815185137`*^9, 3.782103185850932*^9}, {
+  3.7821032288020945`*^9, 3.782103292946628*^9}, {3.7821033276208453`*^9, 
+  3.782103339854151*^9}, {3.782103381076161*^9, 3.7821034222610464`*^9}, {
+  3.7821035228070903`*^9, 3.782103876268158*^9}, {3.782103907460722*^9, 
+  3.7821039205805655`*^9}, {3.782103997237382*^9, 3.782104006436864*^9}, {
+  3.78210405848946*^9, 3.7821040645511627`*^9}, {3.7821041373052673`*^9, 
+  3.782104335819949*^9}, {3.7821043999801426`*^9, 3.7821044013011675`*^9}, {
+  3.7821044767533817`*^9, 
+  3.7821045375667152`*^9}},ExpressionUUID->"698351bb-c421-4a6d-b0a1-\
+ed8437600e21"],
+
+Cell[BoxData[
+ TagBox[
+  StyleBox[
+   DynamicModuleBox[{$CellContext`a$$ = 2, $CellContext`b$$ = 
+    2, $CellContext`c$$ = 1.9407772064208992`, Typeset`show$$ = True, 
+    Typeset`bookmarkList$$ = {}, Typeset`bookmarkMode$$ = "Autorun", 
+    Typeset`animator$$ = AnimatorBox[
+     Dynamic[
+     Typeset`animvar$$, (
+      Typeset`animvar$$ = #; {$CellContext`a$$, $CellContext`b$$, \
+$CellContext`c$$} = Through[
+         Manipulate`Dump`flis1$34175[Typeset`animvar$$]])& ], {0, 12}, 
+     ImageSize -> Small, DefaultDuration -> 12, AnimationRate -> Automatic, 
+     AppearanceElements -> {
+      "ProgressSlider", "PlayPauseButton", "FasterSlowerButtons", 
+       "DirectionButton"}], Typeset`animvar$$ = 9.117314338684082, 
+    Typeset`name$$ = "\"untitled\"", Typeset`specs$$ = {{
+      Hold["lengths of semi-axes"], Manipulate`Dump`ThisIsNotAControl}, {{
+       Hold[$CellContext`a$$], 2, "a"}, 1, 3}, {{
+       Hold[$CellContext`b$$], 2, "b"}, 1, 3}, {{
+       Hold[$CellContext`c$$], 1, "c"}, 1, 3}}, Typeset`size$$ = {
+    500., {176., 181.}}, Typeset`update$$ = 0, Typeset`initDone$$, 
+    Typeset`skipInitDone$$ = True, $CellContext`a$34081$$ = 
+    0, $CellContext`b$34082$$ = 0, $CellContext`c$34083$$ = 0}, 
+    DynamicBox[Manipulate`ManipulateBoxes[
+     1, StandardForm, 
+      "Variables" :> {$CellContext`a$$ = 2, $CellContext`b$$ = 
+        2, $CellContext`c$$ = 1}, "ControllerVariables" :> {
+        Hold[$CellContext`a$$, $CellContext`a$34081$$, 0], 
+        Hold[$CellContext`b$$, $CellContext`b$34082$$, 0], 
+        Hold[$CellContext`c$$, $CellContext`c$34083$$, 0]}, 
+      "OtherVariables" :> {
+       Typeset`show$$, Typeset`bookmarkList$$, Typeset`bookmarkMode$$, 
+        Typeset`animator$$, Typeset`animvar$$, Typeset`name$$, 
+        Typeset`specs$$, Typeset`size$$, Typeset`update$$, Typeset`initDone$$,
+         Typeset`skipInitDone$$}, "Body" :> Show[
+        Graphics3D[{
+          GrayLevel[0.5], 
+          Cylinder[{{0, -100, 0}, {0, 100, 0}}, 0.03], 
+          Cylinder[{{-100, 0, 0}, {100, 0, 0}}, 0.03], 
+          Cylinder[{{0, 0, -100}, {0, 0, 100}}, 0.03]}], 
+        ContourPlot3D[$CellContext`x^2/$CellContext`a$$^2 + \
+$CellContext`y^2/$CellContext`b$$^2 + $CellContext`z^2/$CellContext`c$$^2, \
+{$CellContext`x, -3, 3}, {$CellContext`y, -3, 3}, {$CellContext`z, -3, 3}, 
+         Contours -> {0.01, 0.05, 0.1, 0.25, 0.5, 1}, MeshStyle -> None, 
+         ContourStyle -> {{Red, 
+            Specularity[White, 20], 
+            Opacity[1]}, {Blue, 
+            Specularity[White, 20], 
+            Opacity[0.5]}, {Red, 
+            Specularity[White, 20], 
+            Opacity[0.4]}, {Orange, 
+            Specularity[White, 20], 
+            Opacity[0.3]}, {Green, 
+            Specularity[White, 20], 
+            Opacity[0.2]}, {Yellow, 
+            Specularity[White, 20], 
+            Opacity[0.1]}}, PlotPoints -> 15], Background -> Black, Boxed -> 
+        False, Axes -> None, AxesStyle -> White, Lighting -> {{"Ambient", 
+           GrayLevel[0.3]}, {"Directional", White, 
+           ImageScaled[{1, 1, 1}]}}, ImageSize -> {500, 357}, 
+        PlotRange -> {{-3, 3}, {-3, 3}, {-3, 3}}, SphericalRegion -> True, 
+        ViewAngle -> Pi/10, ImagePadding -> {{0, 0}, {0, 40}}], 
+      "Specifications" :> {
+       "lengths of semi-axes", {{$CellContext`a$$, 2, "a"}, 1, 3, Appearance -> 
+         "Labeled"}, {{$CellContext`b$$, 2, "b"}, 1, 3, Appearance -> 
+         "Labeled"}, {{$CellContext`c$$, 1, "c"}, 1, 3, Appearance -> 
+         "Labeled"}}, "Options" :> {}, "DefaultOptions" :> {}],
+     ImageSizeCache->{551., {289., 295.}},
+     SingleEvaluation->True],
+    Deinitialization:>None,
+    DynamicModuleValues:>{},
+    SynchronousInitialization->True,
+    UndoTrackedVariables:>{Typeset`show$$, Typeset`bookmarkMode$$},
+    UnsavedVariables:>{Typeset`initDone$$},
+    UntrackedVariables:>{Typeset`size$$}], "Manipulate",
+   Deployed->True,
+   StripOnInput->False],
+  Manipulate`InterpretManipulate[1]]], "Output",
+ CellChangeTimes->{{3.782103573771491*^9, 3.7821035921483545`*^9}, 
+   3.7821036583114343`*^9, 3.7821037564899325`*^9, {3.78210385602724*^9, 
+   3.782103876890456*^9}, {3.7821039118270464`*^9, 3.7821039223773255`*^9}, {
+   3.782103999291857*^9, 3.7821040069071784`*^9}, 3.7821040674085255`*^9, 
+   3.78210423584499*^9, 3.782104306259445*^9, 3.7821043369093876`*^9, 
+   3.782104401822773*^9, 3.7821044781925087`*^9, 
+   3.7821045408026285`*^9},ExpressionUUID->"e79df520-53bd-41ff-9dbd-\
+83ee2dd0b590"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["\<\
+
+CAPTION\
+\>", "Section",
+ CellFrame->{{0, 0}, {1, 0}},
+ CellFrameColor->RGBColor[0.87, 0.87, 0.87],
+ CellChangeTimes->{{3.7821021327431827`*^9, 3.782102146967517*^9}, 
+   3.782102183830059*^9},
+ FontFamily->"Helvetica",
+ FontSize->12,
+ FontWeight->"Bold",
+ FontColor->RGBColor[
+  0.597406, 0, 
+   0.0527047],ExpressionUUID->"9eb48477-ba5c-42b0-b251-c314f87f7275"],
+
+Cell[TextData[{
+ "An ellipsoid is a quadratic surface given by ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{
+     FractionBox[
+      SuperscriptBox["x", "2"], 
+      SuperscriptBox["a", "2"]], "+", 
+     FractionBox[
+      SuperscriptBox["y", "2"], 
+      SuperscriptBox["b", "2"]], "+", 
+     FractionBox[
+      SuperscriptBox["z", "2"], 
+      SuperscriptBox["c", "2"]]}], "=", "1"}], TraditionalForm]], 
+  "InlineMath",ExpressionUUID->"6c342b3f-6209-4daf-b386-4eb75ceb2ad9"],
+ "."
+}], "Text",
+ CellChangeTimes->{
+  3.7821022097667127`*^9},ExpressionUUID->"697eed29-ed39-4262-8960-\
+298439c816a6"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["THIS NOTEBOOK IS THE SOURCE CODE FROM", "Text",
+ CellFrame->{{0, 0}, {0, 0}},
+ CellMargins->{{48, 10}, {4, 28}},
+ CellGroupingRules->{"SectionGrouping", 25},
+ CellFrameMargins->{{48, 48}, {6, 5}},
+ CellFrameColor->RGBColor[0.87, 0.87, 0.87],
+ FontFamily->"Helvetica",
+ FontSize->10,
+ FontWeight->"Bold",
+ FontColor->RGBColor[
+  0.597406, 0, 
+   0.0527047],ExpressionUUID->"3915b359-92bf-435d-a7f4-5d71891cbe98"],
+
+Cell[TextData[{
+ "\"",
+ ButtonBox["Ellipsoid",
+  BaseStyle->"Hyperlink",
+  ButtonData->{
+    URL["http://demonstrations.wolfram.com/Ellipsoid/"], None},
+  ButtonNote->"http://demonstrations.wolfram.com/Ellipsoid/"],
+ "\"",
+ " from ",
+ ButtonBox["the Wolfram Demonstrations Project",
+  BaseStyle->"Hyperlink",
+  ButtonData->{
+    URL["http://demonstrations.wolfram.com/"], None},
+  ButtonNote->"http://demonstrations.wolfram.com/"],
+ "\[ParagraphSeparator]\[NonBreakingSpace]",
+ ButtonBox["http://demonstrations.wolfram.com/Ellipsoid/",
+  BaseStyle->"Hyperlink",
+  ButtonData->{
+    URL["http://demonstrations.wolfram.com/Ellipsoid/"], None},
+  ButtonNote->"http://demonstrations.wolfram.com/Ellipsoid/"]
+}], "Text",
+ CellMargins->{{48, Inherited}, {0, Inherited}},
+ FontFamily->"Verdana",
+ FontSize->10,
+ FontColor->GrayLevel[
+  0.5],ExpressionUUID->"4879f7c0-4624-4c76-8760-b6946bacf4f7"],
+
+Cell[TextData[{
+ "Contributed by: ",
+ ButtonBox["Jeff Bryant",
+  BaseStyle->"Hyperlink",
+  ButtonData->{
+    URL["http://demonstrations.wolfram.com/author.html?author=Jeff+Bryant"], 
+    None},
+  ButtonNote->
+   "http://demonstrations.wolfram.com/author.html?author=Jeff+Bryant"]
+}], "Text",
+ CellDingbat->"\[FilledSmallSquare]",
+ CellMargins->{{66, 48}, {2, 4}},
+ FontFamily->"Verdana",
+ FontSize->10,
+ FontColor->GrayLevel[0.6],
+ CellID->98695679,ExpressionUUID->"5ac9d2c7-6fb6-442d-a603-70c03a063d52"],
+
+Cell[TextData[{
+ "A full-function Wolfram ",
+ StyleBox["Mathematica",
+  FontSlant->"Italic"],
+ " system (Version 6 or higher) is required to edit this notebook.\n",
+ StyleBox[ButtonBox["GET WOLFRAM MATHEMATICA \[RightGuillemet]",
+  BaseStyle->"Hyperlink",
+  ButtonData->{
+    URL["http://www.wolfram.com/products/mathematica/"], None},
+  ButtonNote->"http://www.wolfram.com/products/mathematica/"],
+  FontFamily->"Helvetica",
+  FontWeight->"Bold",
+  FontSlant->"Italic",
+  FontColor->RGBColor[1, 0.42, 0]]
+}], "Text",
+ CellFrame->True,
+ CellMargins->{{48, 68}, {8, 28}},
+ CellFrameMargins->12,
+ CellFrameColor->RGBColor[0.87, 0.87, 0.87],
+ CellChangeTimes->{3.3750111182355957`*^9},
+ ParagraphSpacing->{1., 1.},
+ FontFamily->"Verdana",
+ FontSize->10,
+ FontColor->GrayLevel[0.411765],
+ Background->RGBColor[
+  1, 1, 1],ExpressionUUID->"1d304167-4871-4486-a279-bc80c7811d6c"],
+
+Cell[TextData[{
+ "\[Copyright] ",
+ StyleBox[ButtonBox["Wolfram Demonstrations Project & Contributors",
+  BaseStyle->"Hyperlink",
+  ButtonData->{
+    URL["http://demonstrations.wolfram.com/"], None},
+  ButtonNote->"http://demonstrations.wolfram.com/"],
+  FontColor->GrayLevel[0.6]],
+ "\[ThickSpace]\[ThickSpace]\[ThickSpace]|\[ThickSpace]\[ThickSpace]\
+\[ThickSpace]",
+ StyleBox[ButtonBox["Terms of Use",
+  BaseStyle->"Hyperlink",
+  ButtonData->{
+    URL["http://demonstrations.wolfram.com/termsofuse.html"], None},
+  ButtonNote->"http://demonstrations.wolfram.com/termsofuse.html"],
+  FontColor->GrayLevel[0.6]],
+ "\[ThickSpace]\[ThickSpace]\[ThickSpace]|\[ThickSpace]\[ThickSpace]\
+\[ThickSpace]",
+ StyleBox[ButtonBox["Make a new version of this Demonstration \
+\[RightGuillemet]",
+  BaseStyle->"Hyperlink",
+  ButtonData->{
+    URL["http://demonstrations.wolfram.com/participate/upload.jsp?id=\
+Ellipsoid"], None},
+  ButtonNote->None],
+  FontColor->GrayLevel[0.6]]
+}], "Text",
+ CellFrame->{{0, 0}, {0, 0.5}},
+ CellMargins->{{48, 10}, {20, 50}},
+ CellFrameMargins->{{6, 0}, {6, 6}},
+ CellFrameColor->GrayLevel[0.6],
+ FontFamily->"Verdana",
+ FontSize->9,
+ FontColor->GrayLevel[
+  0.6],ExpressionUUID->"864f11df-bd32-4b40-8ba1-a597917ad7e6"]
+}, Open  ]]
+},
+Editable->True,
+Saveable->False,
+ScreenStyleEnvironment->"Working",
+CellInsertionPointCell->None,
+WindowSize->{745, 650},
+WindowMargins->{{387, Automatic}, {Automatic, 0}},
+WindowElements->{
+ "StatusArea", "MemoryMonitor", "MagnificationPopUp", "VerticalScrollBar", 
+  "MenuBar"},
+WindowTitle->"Ellipsoid - Source",
+DockedCells->{},
+CellContext->Notebook,
+FrontEndVersion->"11.1 for Microsoft Windows (64-bit) (April 18, 2017)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[589, 21, 191, 5, 65, "Section", "ExpressionUUID" -> \
+"a923b622-08de-4581-9531-7cb57c42eac1"],
+Cell[CellGroupData[{
+Cell[805, 30, 3758, 65, 45, "Section", "ExpressionUUID" -> \
+"6d9bbf1d-d9cf-4e56-95a9-e78643e75ee7"],
+Cell[CellGroupData[{
+Cell[4588, 99, 6635, 162, 278, "Input", "ExpressionUUID" -> \
+"4e268061-f161-47c0-b2e7-d12a48486226",
+ CellID->1496021318],
+Cell[11226, 263, 3600, 68, 601, "Output", "ExpressionUUID" -> \
+"5fe2ad87-0595-4f5a-b78c-96c7feb3a088",
+ CellID->161028398]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[14863, 336, 7183, 178, 430, InheritFromParent, "ExpressionUUID" -> \
+"698351bb-c421-4a6d-b0a1-ed8437600e21"],
+Cell[22049, 516, 4478, 86, 601, "Output", "ExpressionUUID" -> \
+"e79df520-53bd-41ff-9dbd-83ee2dd0b590"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[26576, 608, 374, 13, 63, "Section", "ExpressionUUID" -> \
+"9eb48477-ba5c-42b0-b251-c314f87f7275"],
+Cell[26953, 623, 607, 20, 46, "Text", "ExpressionUUID" -> \
+"697eed29-ed39-4262-8960-298439c816a6"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[27597, 648, 417, 11, 44, "Text", "ExpressionUUID" -> \
+"3915b359-92bf-435d-a7f4-5d71891cbe98",
+ CellGroupingRules->{"SectionGrouping", 25}],
+Cell[28017, 661, 889, 25, 34, "Text", "ExpressionUUID" -> \
+"4879f7c0-4624-4c76-8760-b6946bacf4f7"],
+Cell[28909, 688, 504, 15, 18, "Text", "ExpressionUUID" -> \
+"5ac9d2c7-6fb6-442d-a603-70c03a063d52",
+ CellID->98695679],
+Cell[29416, 705, 873, 25, 100, "Text", "ExpressionUUID" -> \
+"1d304167-4871-4486-a279-bc80c7811d6c"],
+Cell[30292, 732, 1239, 34, 89, "Text", "ExpressionUUID" -> \
+"864f11df-bd32-4b40-8ba1-a597917ad7e6"]
+}, Open  ]]
+}
+]
+*)
+
