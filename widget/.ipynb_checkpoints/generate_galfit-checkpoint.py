@@ -27,44 +27,71 @@ W = 5
 winX = 1000
 winY = 1000
 winsize = str(winX)+"x"+str(winY)
-imgSizeKey = "H)"
+titlefont = ("Arial Bold", 20)
 
 ### class definitions
 class paramObject: # holds a parameter
-    def __init__(self, text, gridpos, startval, line, start, n, obj=None):
+    def __init__(self, text, gridpos, startval, line, start, n, obj):
         self.text = text # text for label
         self.pos = gridpos # position in grid
         self.line = line # line in parfile
         self.start = start # starting index in line
         self.len = n # length in chars
         self.obj = obj # object referenced
+        self.prevVal = startval
         
         # buttons and labels
-        self.label = Label(root, text=text)
-        self.entry = Entry(root, width=W, state='normal')
+        self.label = Label(btnFrame, text=text)
+        self.entry = Entry(btnFrame, width=W, state='normal')
         self.entry.insert(0, startval)
-        self.entry.configure(state='disabled')
-        self.button = Button(root, text="Edit", command=self.btnPressed)
+        #self.entry.configure(state='disabled')
+        #self.button = Button(btnFrame, text="Edit", command=self.btnPressed)
         
     def grid(self): # position widget in grid
         g = self.pos
         self.label.grid(row=g[0], column=g[1], sticky='w')
         self.entry.grid(row=g[0], column=g[1]+1, sticky='w')
-        self.button.grid(row=g[0], column=g[1]+2, sticky='w')
+        #self.button.grid(row=g[0], column=g[1]+2, sticky='w')
+    
+    def writeNewVal(self):
+        # get new text
+        text = self.entry.get()
+        left = self.len - len(text)
+            
+        # check length against previous length
+        if(left<=0):
+            space = ""
+        else:
+            space = " "*left
+            
+        # format new string
+        newstring = all_pars[self.line][:self.start] + text + space + all_pars[self.line][self.start+self.len:]
+        all_pars[self.line] = newstring
         
+    def evaluate(self):
+        newVal = self.entry.get()
+        if newVal != self.prevVal:
+            self.writeNewVal()
+            self.prevVal = newVal
+    '''    
     def btnPressed(self): # button action
         if(self.entry.cget("state")=='disabled'): # go to edit state
             self.entry.configure(state="normal")
             self.entry.focus()
             self.button.configure(text="Save")
         else: # go to stationary state
-            # save new text
+            # get new text
             text = self.entry.get()
             left = self.len - len(text)
-            if(left<0): # check length against previous length
-                messagebox.showerror('Error: Invalid Value', 'Value exceeds maximum characters')
+            
+            # check length against previous length
+            if(left<=0):
+                space = ""
+            else:
+                space = " "*left
+            
             # format new string
-            newstring = all_pars[self.line][:self.start] + text + " "*left + all_pars[self.line][self.start+self.len:]
+            newstring = all_pars[self.line][:self.start] + text + space + all_pars[self.line][self.start+self.len:]
             all_pars[self.line] = newstring
             # write new params to file
             with open(parfile, 'w') as f:
@@ -73,6 +100,7 @@ class paramObject: # holds a parameter
             # switch buttons
             self.button.configure(text="Edit")
             self.entry.configure(state='disabled')
+        '''
             
 ### function definitions
 def loadImage(panel=None):
@@ -84,12 +112,12 @@ def loadImage(panel=None):
     img = ImageTk.PhotoImage(Image.open(imgfile))
     # check if image panel exists
     if(panel==None): # if no, make one
-        panel = Label(root, image=img)
+        panel = Label(imgFrame, image=img)
     else: # if yes, configure the existing one
         panel.configure(image=img)
     # place in window
     panel.image = img
-    panel.grid(column=5, row=0, sticky='w')
+    panel.grid(column=0, row=0, sticky='w')
     return panel
 
 def runGalfit():
@@ -97,14 +125,22 @@ def runGalfit():
     subprocess.call("./galfit "+parfile, shell=True, stdout=FNULL, stderr=subprocess.STDOUT)
 
 def refreshImage(panel=None):
+    print("Running galfit")
+    # save all object states
+    for obj in all_objects:
+        obj.evaluate()
+    # write to file
+    
+    # write new params to file
+    with open(parfile, 'w') as f:
+        f.writelines(all_pars)
+    
+    # run the program
     runGalfit()
+    # reload the image
     loadImage(panel)
 
 ### main program
-
-# create temporary folder
-if not os.path.exists(tmp_path):
-    os.mkdir(tmp_path)
 
 # read in parameter file
 with open(parfile) as f:
@@ -112,6 +148,8 @@ with open(parfile) as f:
 
 # Dictionary of parameters
 # regex : text value
+d_i = "\d+\S*\d*" # matches a double or int
+pm_i = "\S*\d+\S*\d*" # matches a +/- double or int
 param_matches = {
     # image parameters
     "H\) \d+\s+(\d+)(?:\s+\d+){2}": "Image size x",
@@ -119,51 +157,78 @@ param_matches = {
     #"A\) (.+\.fits)": "Input image"
     # object parameters
     " 0\) (\S+)": "Object type",
-    " 1\) (\S+)(?:\s+\S){3}": "x position",
-    " 1\) \S+\s+(\S+)(?:\s+\S+){2}": "y position"
+    " 1\) ("+d_i+")\s+"+d_i: "x position",
+    " 1\) "+d_i+"\s+("+d_i+")": "y position",
+    " 3\) ("+pm_i+")": "Integrated magnitude",
+    " 4\) ("+d_i+")": "Half-light radius (pix)",
+    " 5\) ("+d_i+")": "Sersic index",
+    " 9\) ("+d_i+")": "Axis ratio (b/a)",
+    "10\) ("+pm_i+")": "Position angle"
 }
+
+object_types = ["sersic", "expdisk", "sky"]
 
 ### Start building GUI
 root = Tk()
 root.title("Galfit Parameters")
+root.geometry(winsize)
+
+# Frame for buttons
+btnFrame = Frame(root, width=winX/2, height=winY)
+btnFrame.grid(row=0, column=0)
+btnFrame.grid_propagate(0)
+# Frame for image
+imgFrame = Frame(root, width=winX/2, height=winY)
+imgFrame.grid(row=0, column=1)
+imgFrame.grid_propagate(0)
+
+# First label
+imgLabel = Label(btnFrame, text="Image parameters:", font=titlefont)
+imgLabel.grid(row=0, column=0, sticky='w')
 
 # build parameter objects from file
 all_objects = []
-obj = None
-count = 0
+obj = 0
+obj_type = None
+count = 1
 for i in range(len(all_pars)):
     line = all_pars[i]
     for key in param_matches.keys():
+        # match each regex to each line
         match = re.match(key, line)
         if match:
-            val = match.group(1)
-            print(line, val, len(val))
-            #param_obj = paramObject(param_matches[key]+":", (0, count), val, )
-            #count += 1
-    '''        
-    # Check image size
-    if line.find(imgSizeKey) != -1:
-        size = (int(line[8:12]), int(line[18:22]))
-        # build labels from line
-        img_sizeX = paramObject("Image size x:", (0, 0), size[0], i, 8, 4)
-        img_sizeY = paramObject("Image size y:", (1, 0), size[1], i, 18, 4)
-        img_sizeX.grid()
-        img_sizeY.grid()
-        all_objects.append(img_sizeX)
-        all_objects.append(img_sizeY)
-     '''
-    
-    
-    
-    # Look for objects
+            val = match.group(1) # get parameter value
+            # check if it's a new object
+            if val in object_types:
+                obj += 1
+                obj_type = val
+                if obj_type=='sky':
+                    continue
+                obj_label = Label(btnFrame, text="Object "+str(obj)+":", font=titlefont)
+                obj_label.grid(row=count, column=0, sticky='w')
+                count+=1
+            
+            #print(line, "\n", param_matches[key], ":", val, "object:", obj, obj_type, "\n")
+            # set up parameter object for UI
+            if obj_type=='sky':
+                continue
+            param_obj = paramObject(param_matches[key]+":", (count, 0), val, i, match.span(1)[0], len(val), obj)
+            param_obj.grid()
+            all_objects.append(param_obj)
+            count += 1
 
-# load the image
+# run galfit and load image
+runGalfit()
 panel = loadImage()
 
-# set up a button to refresh the image
-refreshBtn = Button(root, text="Run Galfit!", command = lambda : refreshImage(panel))
-refreshBtn.grid(row=6, column=0)
+# set up a button to add an object
+addBtn = Button(btnFrame, text="Add an object")
+addBtn.grid(row=count, column=0)
 
-# size and display the finished window
-root.geometry(winsize)
+# set up a button to refresh the image
+refreshBtn = Button(btnFrame, text="Run Galfit!", command = lambda : refreshImage(panel))
+refreshBtn.grid(row=count, column=1)
+count+=1
+
+# display the finished window
 root.mainloop()
