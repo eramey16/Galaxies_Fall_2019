@@ -31,19 +31,24 @@ titlefont = ("Arial Bold", 20)
 
 ### class definitions
 class paramObject: # holds a parameter
-    def __init__(self, text, gridpos, startval, line, start, n, obj):
+    def __init__(self, text, gridpos, match, line, obj):
+        self.val = match.group(1)
         self.text = text # text for label
         self.pos = gridpos # position in grid
         self.line = line # line in parfile
-        self.start = start # starting index in line
-        self.len = n # length in chars
+        self.start = match.span(1)[0] # starting index in line
+        self.end = match.span(2)[0]
+        self.end_min = self.end
+        #self.startlen = n # initial length in chars
+        #self.len = match.span(2)[0] # length in chars
+        #self.next = match.span(2)[0]
         self.obj = obj # object referenced
-        self.prevVal = startval
+        self.prevVal = val
         
         # buttons and labels
         self.label = Label(btnFrame, text=text)
         self.entry = Entry(btnFrame, width=W, state='normal')
-        self.entry.insert(0, startval)
+        self.entry.insert(0, val)
         #self.entry.configure(state='disabled')
         #self.button = Button(btnFrame, text="Edit", command=self.btnPressed)
         
@@ -51,29 +56,61 @@ class paramObject: # holds a parameter
         g = self.pos
         self.label.grid(row=g[0], column=g[1], sticky='w')
         self.entry.grid(row=g[0], column=g[1]+1, sticky='w')
-        #self.button.grid(row=g[0], column=g[1]+2, sticky='w')
+        count += 1
     
     def writeNewVal(self):
         # get new text
-        text = self.entry.get()
-        left = self.len - len(text)
-            
-        # check length against previous length
-        if(left<=0):
-            space = ""
+        newText = self.entry.get()
+        # if the new text is bigger than the current text, do nothing
+        # if the new text is smaller than the current text but bigger than the start text, remove the extra
+        # if the new text is smaller than the start text, add in the extra space
+        left = self.end_min - len(newText) - self.start
+        if left <= 0:
+            space = " "
         else:
             space = " "*left
             
+        '''    
+        # check length against previous length
+        if left<=0:
+            space = ""
+        else:
+            space = " "*left
+        '''
+            
         # format new string
-        newstring = all_pars[self.line][:self.start] + text + space + all_pars[self.line][self.start+self.len:]
+        newstring = all_pars[self.line][:self.start] + newText + space + all_pars[self.line][self.end:]
         all_pars[self.line] = newstring
-        self.len = len(text)
+        self.end = self.start+len(newText)+len(space)
         
     def evaluate(self):
         newVal = self.entry.get()
         if newVal != self.prevVal:
             self.writeNewVal()
             self.prevVal = newVal
+
+class galfitObject:
+    def __init__(num, objType, start):
+        self.startline = start
+        self.endline = len(all_pars)
+        self.num = num
+        self.type = objType
+        self.params = []
+    
+    def gridAll():
+        obj_label = Label(btnFrame, text="Object "+str(obj)+":", font=titlefont)
+        obj_label.grid(row=count, column=0, sticky='w')
+        count += 1
+        for param in self.params:
+            param.grid()
+            
+### ideas to fix spacing problem
+# instead of deleting whitespace when a write occurs, use a separate function for it and do it each save
+    # I'd have to check the space to the # for each thing
+    # then check whether the length of the new thing leaves at least one space between the # and it and delete or add in the extra
+    # then I'd save again
+    # to be really robust I'd save the original space to the # rather than the new one
+# reload objects from the array each time a write occurs - let's not
             
 ### function definitions
 def loadImage(panel=None):
@@ -115,6 +152,23 @@ def refreshImage(panel=None):
     # reload the image
     loadImage(panel)
 
+# generates a line matching select value of numVals parameters
+# num is the line number
+def genLine(num, numVals=2, select=1):
+    numstring = str(num)+"\) "
+    for i in range(1,numVals+1):
+        if i==select or i==select+1:
+            numstring+="(\S+)\s+"
+        else:
+            numstring+="\S+\s+"
+    if select==numVals:
+        numstring+="(\S+)"
+    return numstring
+
+def updateParams(firstRun=False):
+    all_objects = []
+    
+
 ### main program
 
 # read in parameter file
@@ -124,22 +178,20 @@ with open(parfile) as f:
 reloadFile()
 
 # Dictionary of parameters
-# regex : text value
-d_i = "\d+\S*\d*" # matches a double or int
-pm_i = "\S*\d+\S*\d*" # matches a +/- double or int
 param_matches = {
     # image parameters
-    "H\) \d+\s+(\d+)(?:\s+\d+){2}": "Image size x",
-    "H\) (?:\d+\s+){3}(\d+)": "Image size y",
+    genLine("H",4,2): "Image size x",
+    genLine("H",4,4): "Image size y",
     # object parameters
-    " 0\) (\S+)": "Object type",
-    " 1\) ("+d_i+")\s+"+d_i: "x position",
-    " 1\) "+d_i+"\s+("+d_i+")": "y position",
-    " 3\) ("+pm_i+")": "Integrated magnitude",
-    " 4\) ("+d_i+")": "Half-light radius (pix)",
-    " 5\) ("+d_i+")": "Sersic index",
-    " 9\) ("+d_i+")": "Axis ratio (b/a)",
-    "10\) ("+pm_i+")": "Position angle"
+    "# Object number: (\d+)": "Object",
+    " "+genLine(0,1,1): "Object type",
+    " "+genLine(1,4,1): "x position",
+    " "+genLine(1,4,2): "y position",
+    " "+genLine(3): "Integrated magnitude",
+    " "+genLine(4): "Half-light radius (pix)",
+    " "+genLine(5): "Sersic index",
+    " "+genLine(9): "Axis ratio (b/a)",
+    genLine(10): "Position angle"
 }
 
 object_types = ["sersic", "expdisk", "sky"]
@@ -173,6 +225,7 @@ for i in range(len(all_pars)):
         # match each regex to each line
         match = re.match(key, line)
         if match:
+            #print(match.group(0))
             val = match.group(1) # get parameter value
             # check if it's a new object
             if val in object_types:
@@ -188,7 +241,8 @@ for i in range(len(all_pars)):
             # set up parameter object for UI
             if obj_type=='sky':
                 continue
-            param_obj = paramObject(param_matches[key]+":", (count, 0), val, i, match.span(1)[0], len(val), obj)
+            param_obj = paramObject(param_matches[key]+":", (count, 0), match, i, obj)
+            #print(param_matches[key], ": val -", val, ", start:", match.span(1)[0], "\n", line, key)
             param_obj.grid()
             all_objects.append(param_obj)
             count += 1
