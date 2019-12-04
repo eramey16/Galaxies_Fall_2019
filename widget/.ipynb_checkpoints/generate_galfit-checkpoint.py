@@ -16,10 +16,10 @@ import os
 import subprocess
 
 ### file paths
-parfile = "galfit-example/EXAMPLE/galfit_test.feedme" # param file # maybe download from internet later
-original_parfile = "galfit-example/EXAMPLE/galfit.feedme" # parfile to reset if things go awry
 tmp_path = "./.galfit/" # folder for temporary files
-fitsfile = "imgblock.fits" # image file
+parfile = tmp_path+"galfit-example/EXAMPLE/galfit_test.feedme" # param file # maybe download from internet later
+original_parfile = tmp_path+"galfit-example/EXAMPLE/galfit.feedme" # parfile to reset if things go awry
+fitsfile = tmp_path+"imgblock.fits" # image file
 imgfile = tmp_path+"tmp_img.png"
 
 ### global variables
@@ -67,40 +67,13 @@ class paramObject: # holds a parameter
         # format new string
         newstring = all_pars[self.line][:self.start] + text + space + all_pars[self.line][self.start+self.len:]
         all_pars[self.line] = newstring
+        self.len = len(text)
         
     def evaluate(self):
         newVal = self.entry.get()
         if newVal != self.prevVal:
             self.writeNewVal()
             self.prevVal = newVal
-    '''    
-    def btnPressed(self): # button action
-        if(self.entry.cget("state")=='disabled'): # go to edit state
-            self.entry.configure(state="normal")
-            self.entry.focus()
-            self.button.configure(text="Save")
-        else: # go to stationary state
-            # get new text
-            text = self.entry.get()
-            left = self.len - len(text)
-            
-            # check length against previous length
-            if(left<=0):
-                space = ""
-            else:
-                space = " "*left
-            
-            # format new string
-            newstring = all_pars[self.line][:self.start] + text + space + all_pars[self.line][self.start+self.len:]
-            all_pars[self.line] = newstring
-            # write new params to file
-            with open(parfile, 'w') as f:
-                f.writelines(all_pars)
-            
-            # switch buttons
-            self.button.configure(text="Edit")
-            self.entry.configure(state='disabled')
-        '''
             
 ### function definitions
 def loadImage(panel=None):
@@ -124,12 +97,14 @@ def runGalfit():
     FNULL = open(os.devnull, 'w')
     subprocess.call("./galfit "+parfile, shell=True, stdout=FNULL, stderr=subprocess.STDOUT)
 
+def reloadFile():
+    with open(parfile) as f:
+        all_pars = f.readlines()
+
 def refreshImage(panel=None):
-    print("Running galfit")
     # save all object states
     for obj in all_objects:
         obj.evaluate()
-    # write to file
     
     # write new params to file
     with open(parfile, 'w') as f:
@@ -146,6 +121,8 @@ def refreshImage(panel=None):
 with open(parfile) as f:
     all_pars = f.readlines()
 
+reloadFile()
+
 # Dictionary of parameters
 # regex : text value
 d_i = "\d+\S*\d*" # matches a double or int
@@ -154,7 +131,6 @@ param_matches = {
     # image parameters
     "H\) \d+\s+(\d+)(?:\s+\d+){2}": "Image size x",
     "H\) (?:\d+\s+){3}(\d+)": "Image size y",
-    #"A\) (.+\.fits)": "Input image"
     # object parameters
     " 0\) (\S+)": "Object type",
     " 1\) ("+d_i+")\s+"+d_i: "x position",
@@ -170,7 +146,7 @@ object_types = ["sersic", "expdisk", "sky"]
 
 ### Start building GUI
 root = Tk()
-root.title("Galfit Parameters")
+root.title("Galfit GUI")
 root.geometry(winsize)
 
 # Frame for buttons
@@ -183,7 +159,7 @@ imgFrame.grid(row=0, column=1)
 imgFrame.grid_propagate(0)
 
 # First label
-imgLabel = Label(btnFrame, text="Image parameters:", font=titlefont)
+imgLabel = Label(btnFrame, text="Galfit parameters:", font=titlefont)
 imgLabel.grid(row=0, column=0, sticky='w')
 
 # build parameter objects from file
@@ -232,3 +208,5 @@ count+=1
 
 # display the finished window
 root.mainloop()
+
+#TODO - write a function so you can refresh the text of entries when galfit is run

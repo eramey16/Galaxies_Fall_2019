@@ -146,7 +146,7 @@ object_types = ["sersic", "expdisk", "sky"]
 
 ### Start building GUI
 root = Tk()
-root.title("Galfit GUI")
+root.title("Galfit Parameters")
 root.geometry(winsize)
 
 # Frame for buttons
@@ -159,7 +159,7 @@ imgFrame.grid(row=0, column=1)
 imgFrame.grid_propagate(0)
 
 # First label
-imgLabel = Label(btnFrame, text="Galfit parameters:", font=titlefont)
+imgLabel = Label(btnFrame, text="Image parameters:", font=titlefont)
 imgLabel.grid(row=0, column=0, sticky='w')
 
 # build parameter objects from file
