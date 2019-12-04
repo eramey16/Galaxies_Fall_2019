@@ -29,12 +29,13 @@ winY = 1000
 winsize = str(winX)+"x"+str(winY)
 titlefont = ("Arial Bold", 20)
 
+count = 0
+
 ### class definitions
 class paramObject: # holds a parameter
-    def __init__(self, text, gridpos, match, line, obj):
+    def __init__(self, text, match, line, obj):
         self.val = match.group(1)
         self.text = text # text for label
-        self.pos = gridpos # position in grid
         self.line = line # line in parfile
         self.start = match.span(1)[0] # starting index in line
         self.end = match.span(2)[0]
@@ -53,9 +54,9 @@ class paramObject: # holds a parameter
         #self.button = Button(btnFrame, text="Edit", command=self.btnPressed)
         
     def grid(self): # position widget in grid
-        g = self.pos
-        self.label.grid(row=g[0], column=g[1], sticky='w')
-        self.entry.grid(row=g[0], column=g[1]+1, sticky='w')
+        global count
+        self.label.grid(row=count, column=0, sticky='w')
+        self.entry.grid(row=count, column=1, sticky='w')
         count += 1
     
     def writeNewVal(self):
@@ -90,16 +91,23 @@ class paramObject: # holds a parameter
             self.prevVal = newVal
 
 class galfitObject:
-    def __init__(num, objType, start):
+    def __init__(self, num, start=0, objType=None):
         self.startline = start
         self.endline = len(all_pars)
-        self.num = num
+        self.num = int(num)
         self.type = objType
         self.params = []
+        if self.num == 0:
+            text="Galfit parameters:"
+        else:
+            text = "Object "+str(self.num)+":"
+        self.label = Label(btnFrame, text=text, font=titlefont)
     
-    def gridAll():
-        obj_label = Label(btnFrame, text="Object "+str(obj)+":", font=titlefont)
-        obj_label.grid(row=count, column=0, sticky='w')
+    def gridAll(self):
+        global count
+        if self.type == 'sky':
+            return
+        self.label.grid(row=count, column=0, sticky='w')
         count += 1
         for param in self.params:
             param.grid()
@@ -113,6 +121,10 @@ class galfitObject:
 # reload objects from the array each time a write occurs - let's not
             
 ### function definitions
+def countOne():
+    global count
+    count += 1
+
 def loadImage(panel=None):
     # first save as png
     with fits.open(fitsfile) as f:
@@ -178,12 +190,13 @@ with open(parfile) as f:
 reloadFile()
 
 # Dictionary of parameters
+newObjKey = "# Object number: (\d+)"
 param_matches = {
     # image parameters
     genLine("H",4,2): "Image size x",
     genLine("H",4,4): "Image size y",
     # object parameters
-    "# Object number: (\d+)": "Object",
+    newObjKey: "Object",
     " "+genLine(0,1,1): "Object type",
     " "+genLine(1,4,1): "x position",
     " "+genLine(1,4,2): "y position",
@@ -212,40 +225,41 @@ imgFrame.grid_propagate(0)
 
 # First label
 imgLabel = Label(btnFrame, text="Galfit parameters:", font=titlefont)
-imgLabel.grid(row=0, column=0, sticky='w')
+imgLabel.grid(row=0, column=count, sticky='w')
+count += 1
 
 # build parameter objects from file
 all_objects = []
-obj = 0
-obj_type = None
-count = 1
+obj = galfitObject(0, 2)
+all_objects.append(obj)
 for i in range(len(all_pars)):
     line = all_pars[i]
     for key in param_matches.keys():
         # match each regex to each line
         match = re.match(key, line)
         if match:
-            #print(match.group(0))
             val = match.group(1) # get parameter value
             # check if it's a new object
-            if val in object_types:
-                obj += 1
-                obj_type = val
-                if obj_type=='sky':
-                    continue
-                obj_label = Label(btnFrame, text="Object "+str(obj)+":", font=titlefont)
-                obj_label.grid(row=count, column=0, sticky='w')
-                count+=1
-            
-            #print(line, "\n", param_matches[key], ":", val, "object:", obj, obj_type, "\n")
-            # set up parameter object for UI
-            if obj_type=='sky':
+            if key == newObjKey:
+                obj.endline = i-1
+                obj = galfitObject(val, i)
+                all_objects.append(obj)
                 continue
-            param_obj = paramObject(param_matches[key]+":", (count, 0), match, i, obj)
-            #print(param_matches[key], ": val -", val, ", start:", match.span(1)[0], "\n", line, key)
-            param_obj.grid()
-            all_objects.append(param_obj)
-            count += 1
+            
+            # check if it's an object type
+            if val in object_types:
+                obj.type = val
+            
+            # set up parameter object for UI
+            if obj.type=='sky':
+                continue
+            param_obj = paramObject(param_matches[key]+":", match, i, obj)
+            
+            obj.params.append(param_obj)
+
+for obj in all_objects:
+    if obj.type != "sky":
+        obj.gridAll()
 
 # run galfit and load image
 runGalfit()
