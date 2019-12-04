@@ -254,7 +254,7 @@ def readParams(pars):
                 obj.params.append(param_obj)
     return objects
 
-def reloadUI(all_objects):
+def reloadUI():
     new_objects = readParams(all_pars)
     
     count[0] = 0
@@ -264,14 +264,15 @@ def reloadUI(all_objects):
     for btn in buttons:
         btn.grid_remove()
     
+    all_objects.clear()
     for obj in new_objects:
         obj.gridAll()
+        all_objects.append(obj)
     
     for i in range(len(buttons)):
         buttons[i].grid(row=count[0], column=i)
     count[0]+=1
     
-    all_objects = new_objects
     #return new_objects
 # this is broken and I don't know why
 # maybe I'll just change all_pars, write it, and hope for the best
@@ -283,12 +284,15 @@ def addObject():
     for line in objTemplate:
         all_pars.append(line)
     
+    
+    
     obj.startline = len(all_objects)
     obj.endline = len(all_objects)+len(objTemplate)-1
     obj.num = all_objects[-1].num+1
     #all_objects.append(obj)
     #print(len(all_objects))
-    reloadUI(all_objects)
+    reloadUI()
+    refreshImage()
     
 ### main program
 
@@ -362,7 +366,7 @@ for obj in all_objects:
     if obj.type != "sky":
         obj.gridAll()
 
-reloadUI(all_objects)
+#reloadUI(all_objects)
 #print(len(all_objects))
 
 # run galfit and load image
