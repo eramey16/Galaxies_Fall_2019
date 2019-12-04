@@ -16,7 +16,7 @@ import os
 import subprocess
 
 ### file paths
-tmp_path = "./.galfit/" # folder for temporary files
+tmp_path = ".galfit/" # folder for temporary files
 parfile = tmp_path+"galfit-example/EXAMPLE/galfit_test.feedme" # param file # maybe download from internet later
 original_parfile = tmp_path+"galfit-example/EXAMPLE/galfit.feedme" # parfile to reset if things go awry
 fitsfile = tmp_path+"imgblock.fits" # image file
@@ -30,6 +30,7 @@ winsize = str(winX)+"x"+str(winY)
 titlefont = ("Arial Bold", 20)
 
 count = 0
+all_pars = []
 
 ### class definitions
 class paramObject: # holds a parameter
@@ -111,6 +112,10 @@ class galfitObject:
         count += 1
         for param in self.params:
             param.grid()
+    
+    def evaluateAll(self):
+        for param in self.params:
+            param.evaluate()
             
 ### ideas to fix spacing problem
 # instead of deleting whitespace when a write occurs, use a separate function for it and do it each save
@@ -146,18 +151,23 @@ def runGalfit():
     FNULL = open(os.devnull, 'w')
     subprocess.call("./galfit "+parfile, shell=True, stdout=FNULL, stderr=subprocess.STDOUT)
 
-def reloadFile():
+def readFile():
+    global all_pars
     with open(parfile) as f:
         all_pars = f.readlines()
+
+def writeFile():
+    global all_pars
+    with open(parfile, 'w') as f:
+        f.writelines(all_pars)
 
 def refreshImage(panel=None):
     # save all object states
     for obj in all_objects:
-        obj.evaluate()
+        obj.evaluateAll()
     
     # write new params to file
-    with open(parfile, 'w') as f:
-        f.writelines(all_pars)
+    writeFile()
     
     # run the program
     runGalfit()
@@ -173,6 +183,7 @@ def genLine(num, numVals=2, select=1):
             numstring+="(\S+)\s+"
         else:
             numstring+="\S+\s+"
+        
     if select==numVals:
         numstring+="(\S+)"
     return numstring
@@ -180,19 +191,23 @@ def genLine(num, numVals=2, select=1):
 def updateParams(firstRun=False):
     all_objects = []
     
+def changeOutfile(line, match):
+    print("changing outfile part 2")
+    start, end = match.span(1)
+    newline = all_pars[line][:start]+fitsfile+all_pars[line][end:]
+    all_pars[line] = newline
+    writeFile()
 
 ### main program
 
 # read in parameter file
-with open(parfile) as f:
-    all_pars = f.readlines()
-
-reloadFile()
+readFile()
 
 # Dictionary of parameters
 newObjKey = "# Object number: (\d+)"
 param_matches = {
     # image parameters
+    genLine("B", 1, 1): "outfile",
     genLine("H",4,2): "Image size x",
     genLine("H",4,4): "Image size y",
     # object parameters
@@ -223,11 +238,6 @@ imgFrame = Frame(root, width=winX/2, height=winY)
 imgFrame.grid(row=0, column=1)
 imgFrame.grid_propagate(0)
 
-# First label
-imgLabel = Label(btnFrame, text="Galfit parameters:", font=titlefont)
-imgLabel.grid(row=0, column=count, sticky='w')
-count += 1
-
 # build parameter objects from file
 all_objects = []
 obj = galfitObject(0, 2)
@@ -238,6 +248,12 @@ for i in range(len(all_pars)):
         # match each regex to each line
         match = re.match(key, line)
         if match:
+            # make it output to tmp directory
+            if param_matches[key]=="outfile":
+                print("changing outfile")
+                changeOutfile(i, match)
+                continue
+            
             val = match.group(1) # get parameter value
             # check if it's a new object
             if key == newObjKey:
