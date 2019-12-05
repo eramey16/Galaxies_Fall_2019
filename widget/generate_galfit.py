@@ -31,6 +31,21 @@ titlefont = ("Arial Bold", 20)
 
 count = 0
 all_pars = []
+all_objects = []
+all_buttons = []
+objTemplate = ['# Object number: 1\n',
+        ' 0) sersic                 #  object type\n',
+        ' 1) 100         100   1 1  #  position x, y\n',
+        ' 3) 2.0         1          #  Integrated magnitude\n',
+        ' 4) 100         1          #  R_e (half-light radius)   [pix]\n',
+        ' 5) 1           1          #  Sersic index n (de Vaucouleurs n=4) \n',
+        ' 6) 0.0000      0          #     ----- \n',
+        ' 7) 0.0000      0          #     ----- \n',
+        ' 8) 0.0000      0          #     ----- \n',
+        ' 9) 1.75        1          #  axis ratio (b/a)  \n',
+        '10) -75.0       1          #  position angle (PA) [deg: Up=0, Left=90]\n',
+        " Z) 0                      #  output option (0 = resid., 1 = Don't subtract) \n",
+        '\n']
 
 ### class definitions
 class paramObject: # holds a parameter
@@ -41,16 +56,13 @@ class paramObject: # holds a parameter
         self.start = match.span(1)[0] # starting index in line
         self.end = match.span(2)[0]
         self.end_min = self.end
-        #self.startlen = n # initial length in chars
-        #self.len = match.span(2)[0] # length in chars
-        #self.next = match.span(2)[0]
         self.obj = obj # object referenced
-        self.prevVal = val
+        self.prevVal = self.val
         
         # buttons and labels
         self.label = Label(btnFrame, text=text)
         self.entry = Entry(btnFrame, width=W, state='normal')
-        self.entry.insert(0, val)
+        self.entry.insert(0, self.val)
         #self.entry.configure(state='disabled')
         #self.button = Button(btnFrame, text="Edit", command=self.btnPressed)
         
@@ -59,6 +71,10 @@ class paramObject: # holds a parameter
         self.label.grid(row=count, column=0, sticky='w')
         self.entry.grid(row=count, column=1, sticky='w')
         count += 1
+    
+    def ungrid(self):
+        self.label.grid_remove()
+        self.entry.grid_remove()
     
     def writeNewVal(self):
         # get new text
@@ -72,20 +88,12 @@ class paramObject: # holds a parameter
         else:
             space = " "*left
             
-        '''    
-        # check length against previous length
-        if left<=0:
-            space = ""
-        else:
-            space = " "*left
-        '''
-            
         # format new string
         newstring = all_pars[self.line][:self.start] + newText + space + all_pars[self.line][self.end:]
         all_pars[self.line] = newstring
         self.end = self.start+len(newText)+len(space)
         
-    def evaluate(self):
+    def save(self):
         newVal = self.entry.get()
         if newVal != self.prevVal:
             self.writeNewVal()
@@ -113,9 +121,15 @@ class galfitObject:
         for param in self.params:
             param.grid()
     
-    def evaluateAll(self):
+    def ungridAll(self):
+        self.label.grid_remove()
         for param in self.params:
-            param.evaluate()
+            param.ungrid()
+    
+    def saveAll(self):
+        for param in self.params:
+            param.save()
+        writeFile()
             
 ### ideas to fix spacing problem
 # instead of deleting whitespace when a write occurs, use a separate function for it and do it each save
@@ -130,7 +144,7 @@ def countOne():
     global count
     count += 1
 
-def loadImage(panel=None):
+def readImage(panel=None):
     # first save as png
     with fits.open(fitsfile) as f:
         data = f[0].data
@@ -144,7 +158,7 @@ def loadImage(panel=None):
         panel.configure(image=img)
     # place in window
     panel.image = img
-    panel.grid(column=0, row=0, sticky='w')
+    panel.place(relx=.3, rely=.3, anchor="center")
     return panel
 
 def runGalfit():
@@ -161,21 +175,53 @@ def writeFile():
     with open(parfile, 'w') as f:
         f.writelines(all_pars)
 
-def refreshImage(panel=None):
+def loadImage(panel=None):
     # save all object states
     for obj in all_objects:
-        obj.evaluateAll()
-    
-    # write new params to file
-    writeFile()
+        obj.saveAll()
     
     # run the program
     runGalfit()
     # reload the image
-    loadImage(panel)
+    return readImage(panel)
 
 # generates a line matching select value of numVals parameters
 # num is the line number
+def readParams():
+    global all_objects
+    # build parameter objects from file
+    obj = galfitObject(0, 2)
+    all_objects.append(obj)
+    for i in range(len(all_pars)):
+        line = all_pars[i]
+        for key in param_matches.keys():
+            # match each regex to each line
+            match = re.match(key, line)
+            if match:
+                # make it output to tmp directory
+                if param_matches[key]=="outfile":
+                    changeOutfile(i, match)
+                    continue
+
+                val = match.group(1) # get parameter value
+                # check if it's a new object
+                if key == newObjKey:
+                    obj.endline = i-1
+                    obj = galfitObject(val, i)
+                    all_objects.append(obj)
+                    continue
+
+                # check if it's an object type
+                if val in object_types:
+                    obj.type = val
+
+                # set up parameter object for UI
+                if obj.type=='sky':
+                    continue
+                param_obj = paramObject(param_matches[key]+":", match, i, obj)
+            
+                obj.params.append(param_obj)
+    
 def genLine(num, numVals=2, select=1):
     numstring = str(num)+"\) "
     for i in range(1,numVals+1):
@@ -187,16 +233,61 @@ def genLine(num, numVals=2, select=1):
     if select==numVals:
         numstring+="(\S+)"
     return numstring
-
-def updateParams(firstRun=False):
-    all_objects = []
     
 def changeOutfile(line, match):
-    print("changing outfile part 2")
     start, end = match.span(1)
     newline = all_pars[line][:start]+fitsfile+all_pars[line][end:]
     all_pars[line] = newline
     writeFile()
+
+def addObject():
+    global all_pars
+    global all_objects
+    global all_buttons
+    global count
+    
+    global addBtn
+    global refreshBtn
+    
+    # remove current entries and buttons
+    for obj in all_objects:
+        obj.ungridAll()
+    addBtn.grid_remove()
+    refreshBtn.grid_remove()
+    
+    # restart count
+    count = 0
+    
+    # Make new object
+    objTemplate[0] = objTemplate[0][:-2]+str(all_objects[-1].num+1)+objTemplate[-1]
+    for line in objTemplate: # add it to parameters
+        all_pars.append(line)
+    writeFile()
+    
+    # refresh params & objects
+    all_pars = []
+    readFile()
+    all_objects = []
+    readParams()
+    for obj in all_objects:
+        obj.gridAll()
+    
+    addBtn.grid(row=count, column=0)
+    refreshBtn.grid(row=count, column=1)
+    count += 1
+        
+    on_configure(0)
+
+    all_buttons.append(addBtn)
+    all_buttons.append(refreshBtn)
+
+    runGalfit()
+    readImage()
+
+def on_configure(event):
+    # update scrollregion after starting 'mainloop'
+    # when all widgets are in canvas
+    btnCanvas.configure(scrollregion=btnCanvas.bbox('all'))
 
 ### main program
 
@@ -230,48 +321,31 @@ root.title("Galfit GUI")
 root.geometry(winsize)
 
 # Frame for buttons
-btnFrame = Frame(root, width=winX/2, height=winY)
-btnFrame.grid(row=0, column=0)
-btnFrame.grid_propagate(0)
+btnFrame1 = Frame(root, width=winX/2, height=winY)
+btnFrame1.pack(side=LEFT, fill=Y)
+#btnFrame.place(relx=0, rely=0, anchor="center")
+#btnFrame1.grid_propagate(0)
 # Frame for image
 imgFrame = Frame(root, width=winX/2, height=winY)
-imgFrame.grid(row=0, column=1)
-imgFrame.grid_propagate(0)
+imgFrame.pack(side=RIGHT, fill=Y)
+#imgFrame.place(relx=.5, rely=0, anchor="center")
+#imgFrame.grid_propagate(0)
 
-# build parameter objects from file
-all_objects = []
-obj = galfitObject(0, 2)
-all_objects.append(obj)
-for i in range(len(all_pars)):
-    line = all_pars[i]
-    for key in param_matches.keys():
-        # match each regex to each line
-        match = re.match(key, line)
-        if match:
-            # make it output to tmp directory
-            if param_matches[key]=="outfile":
-                print("changing outfile")
-                changeOutfile(i, match)
-                continue
-            
-            val = match.group(1) # get parameter value
-            # check if it's a new object
-            if key == newObjKey:
-                obj.endline = i-1
-                obj = galfitObject(val, i)
-                all_objects.append(obj)
-                continue
-            
-            # check if it's an object type
-            if val in object_types:
-                obj.type = val
-            
-            # set up parameter object for UI
-            if obj.type=='sky':
-                continue
-            param_obj = paramObject(param_matches[key]+":", match, i, obj)
-            
-            obj.params.append(param_obj)
+btnCanvas = Canvas(btnFrame1)
+btnCanvas.pack(side=LEFT, fill=Y)
+
+scrollbar = Scrollbar(root, command=btnCanvas.yview)
+scrollbar.pack(side=RIGHT, fill=Y)
+
+btnCanvas.configure(yscrollcommand = scrollbar.set)
+btnCanvas.bind('<Configure>', on_configure)
+
+btnFrame = Frame(btnCanvas)
+btnCanvas.create_window((0,0), window=btnFrame, anchor='nw')
+
+
+### read in parameters
+readParams()
 
 for obj in all_objects:
     if obj.type != "sky":
@@ -282,15 +356,20 @@ runGalfit()
 panel = loadImage()
 
 # set up a button to add an object
-addBtn = Button(btnFrame, text="Add an object")
+addBtn = Button(btnFrame, text="Add an object", command=addObject)
 addBtn.grid(row=count, column=0)
 
 # set up a button to refresh the image
-refreshBtn = Button(btnFrame, text="Run Galfit!", command = lambda : refreshImage(panel))
+refreshBtn = Button(btnFrame, text="Run Galfit!", command = lambda : loadImage(panel))
 refreshBtn.grid(row=count, column=1)
 count+=1
 
+all_buttons.append(addBtn)
+all_buttons.append(refreshBtn)
+
 # display the finished window
 root.mainloop()
+
+subprocess.call(["cp", original_parfile, parfile])
 
 #TODO - write a function so you can refresh the text of entries when galfit is run
