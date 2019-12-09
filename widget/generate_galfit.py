@@ -16,6 +16,13 @@ from astropy.io import fits
 import os
 import subprocess
 
+### frontend global variables
+W = 5
+winX = 1000
+winY = 1000
+winsize = str(winX)+"x"+str(winY)
+titlefont = ("Arial Bold", 20)
+
 ### file paths
 tmp_path = ".galfit/" # folder for temporary files
 usr_parfile = None
@@ -24,13 +31,7 @@ original_parfile = tmp_path+"galfit-example/EXAMPLE/galfit.feedme" # parfile to 
 fitsfile = tmp_path+"imgblock.fits" # image file
 imgfile = tmp_path+"tmp_img.png"
 
-### global variables
-W = 5
-winX = 1000
-winY = 1000
-winsize = str(winX)+"x"+str(winY)
-titlefont = ("Arial Bold", 20)
-
+# backend global variables
 count = 0
 all_pars = []
 all_objects = []
@@ -49,20 +50,122 @@ objTemplate = ['# Object number: 1\n',
         " Z) 0                      #  output option (0 = resid., 1 = Don't subtract) \n",
         '\n']
 
-from galfitObject import galfitObject
-from paramObject import paramObject
-from util import *
+### class definitions
+class paramObject: # holds a parameter
+    def __init__(self, text, match, line, obj):
+        self.val = match.group(1)
+        self.text = text # text for label
+        self.line = line # line in parfile
+        self.start = match.span(1)[0] # starting index in line
+        self.end = match.span(2)[0]
+        self.end_min = self.end
+        self.obj = obj # object referenced
+        self.prevVal = self.val
         
+        # buttons and labels
+        self.label = Label(btnFrame, text=text)
+        self.entry = Entry(btnFrame, width=W, state='normal')
+        self.entry.insert(0, self.val)
+        #self.entry.configure(state='disabled')
+        #self.button = Button(btnFrame, text="Edit", command=self.btnPressed)
+        
+    def grid(self): # position widget in grid
+        global count
+        self.label.grid(row=count, column=0, sticky='w')
+        self.entry.grid(row=count, column=1, sticky='w')
+        count += 1
+    
+    def ungrid(self):
+        self.label.grid_remove()
+        self.entry.grid_remove()
+    
+    def writeNewVal(self):
+        # get new text
+        newText = self.entry.get()
+        # if the new text is bigger than the current text, do nothing
+        # if the new text is smaller than the current text but bigger than the start text, remove the extra
+        # if the new text is smaller than the start text, add in the extra space
+        left = self.end_min - len(newText) - self.start
+        if left <= 0:
+            space = " "
+        else:
+            space = " "*left
             
-### ideas to fix spacing problem
-# instead of deleting whitespace when a write occurs, use a separate function for it and do it each save
-    # I'd have to check the space to the # for each thing
-    # then check whether the length of the new thing leaves at least one space between the # and it and delete or add in the extra
-    # then I'd save again
-    # to be really robust I'd save the original space to the # rather than the new one
-# reload objects from the array each time a write occurs - let's not
+        # format new string
+        newstring = all_pars[self.line][:self.start] + newText + space + all_pars[self.line][self.end:]
+        all_pars[self.line] = newstring
+        self.end = self.start+len(newText)+len(space)
+        
+    def save(self):
+        newVal = self.entry.get()
+        if newVal != self.prevVal:
+            self.writeNewVal()
+            self.prevVal = newVal
+
+class galfitObject:
+    def __init__(self, num, start=0, objType=None):
+        self.startline = start
+        self.endline = len(all_pars)
+        self.num = int(num)
+        self.type = objType
+        self.params = []
+        if self.num == 0:
+            text="Galfit parameters:"
+        else:
+            text = "Object "+str(self.num)+":"
+        self.label = Label(btnFrame, text=text, font=titlefont)
+        self.button = Button(btnFrame, text="Remove object", command=lambda:self.remove())
+    
+    def gridAll(self):
+        global count
+        if self.type == 'sky':
+            return
+        self.label.grid(row=count, column=0, sticky='w')
+        if self.type != None:
+            self.button.grid(row = count, column=1, sticky='w')
+        count += 1
+        for param in self.params:
+            param.grid()
+    
+    def ungridAll(self):
+        self.label.grid_remove()
+        for param in self.params:
+            param.ungrid()
+    
+    def saveAll(self):
+        for param in self.params:
+            param.save()
+        writeFile()
+    
+    def remove(self):
+        global all_objects
+        global all_pars
+
+        all_objects.remove(self)
+        all_pars = all_pars[:self.startline]+all_pars[self.endline:]
+        writeFile()
+        reloadGUI()
             
 ### function definitions
+def checkPar():
+    if usr_parfile==None:
+        return parfile
+    else:
+        return usr_parfile
+
+def readFile():
+    global all_pars
+    p = checkPar()
+    
+    with open(p) as f:
+        all_pars = f.readlines()
+
+def writeFile():
+    global all_pars
+    p = checkPar()
+    with open(p, 'w') as f:
+        f.writelines(all_pars)
+
 def countOne():
     global count
     count += 1
@@ -89,25 +192,6 @@ def runGalfit():
     FNULL = open(os.devnull, 'w')
     p = checkPar()
     subprocess.call("./galfit "+p, shell=True, stdout=FNULL, stderr=subprocess.STDOUT)
-
-def checkPar():
-    if usr_parfile==None:
-        return parfile
-    else:
-        return usr_parfile
-
-def readFile():
-    global all_pars
-    p = checkPar()
-    
-    with open(p) as f:
-        all_pars = f.readlines()
-
-def writeFile():
-    global all_pars
-    p = checkPar()
-    with open(p, 'w') as f:
-        f.writelines(all_pars)
 
 def loadImage(panel=None):
     # save all object states

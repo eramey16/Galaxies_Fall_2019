@@ -1,9 +1,10 @@
-import util
+import util as u
+from tkinter import *
 
-class galfitObject:
-    def __init__(self, num, start=0, objType=None):
+class GalfitObject:
+    def __init__(self, frame, num, start=0, objType=None):
         self.startline = start
-        self.endline = len(util.all_pars)
+        self.endline = len(u.all_pars)
         self.num = int(num)
         self.type = objType
         self.params = []
@@ -11,16 +12,16 @@ class galfitObject:
             text="Galfit parameters:"
         else:
             text = "Object "+str(self.num)+":"
-        self.label = Label(btnFrame, text=text, font=titlefont)
-        self.button = Button(btnFrame, text="Remove object", command=lambda:self.remove())
+        self.label = Label(frame, text=text, font=titlefont)
+        self.button = Button(frame, text="Remove object", command=lambda:self.remove())
     
     def gridAll(self):
         if self.type == 'sky':
             return
-        self.label.grid(row=util.count, column=0, sticky='w')
+        self.label.grid(row=u.count, column=0, sticky='w')
         if self.type != None:
-            self.button.grid(row = util.count, column=1, sticky='w')
-        util.count += 1
+            self.button.grid(row = u.count, column=1, sticky='w')
+        u.count += 1
         for param in self.params:
             param.grid()
     
@@ -32,10 +33,10 @@ class galfitObject:
     def saveAll(self):
         for param in self.params:
             param.save()
-        writeFile()
+        u.writeFile()
     
     def remove(self):
-        util.all_objects.remove(self)
-        util.all_pars = util.all_pars[:self.startline]+util.all_pars[self.endline:]
-        writeFile()
+        u.all_objects.remove(self)
+        u.all_pars = u.all_pars[:self.startline]+u.all_pars[self.endline:]
+        u.writeFile()
         reloadGUI()

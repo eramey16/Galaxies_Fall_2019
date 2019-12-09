@@ -1,7 +1,8 @@
-import util
+import util as u
+from tkinter import *
 
-class paramObject: # holds a parameter
-    def __init__(self, text, match, line, obj):
+class ParamObject: # holds a parameter
+    def __init__(self, frame, text, match, line, obj):
         self.val = match.group(1)
         self.text = text # text for label
         self.line = line # line in parfile
@@ -12,16 +13,16 @@ class paramObject: # holds a parameter
         self.prevVal = self.val
         
         # buttons and labels
-        self.label = Label(btnFrame, text=text)
-        self.entry = Entry(btnFrame, width=W, state='normal')
+        self.label = Label(frame, text=text)
+        self.entry = Entry(frame, width=W, state='normal')
         self.entry.insert(0, self.val)
         #self.entry.configure(state='disabled')
         #self.button = Button(btnFrame, text="Edit", command=self.btnPressed)
         
     def grid(self): # position widget in grid
-        self.label.grid(row=util.count, column=0, sticky='w')
-        self.entry.grid(row=util.count, column=1, sticky='w')
-        util.count += 1
+        self.label.grid(row=u.count, column=0, sticky='w')
+        self.entry.grid(row=u.count, column=1, sticky='w')
+        u.count += 1
     
     def ungrid(self):
         self.label.grid_remove()
@@ -40,8 +41,8 @@ class paramObject: # holds a parameter
             space = " "*left
             
         # format new string
-        newstring = util.all_pars[self.line][:self.start] + newText + space + util.all_pars[self.line][self.end:]
-        util.all_pars[self.line] = newstring
+        newstring = u.all_pars[self.line][:self.start] + newText + space + u.all_pars[self.line][self.end:]
+        u.all_pars[self.line] = newstring
         self.end = self.start+len(newText)+len(space)
         
     def save(self):
