@@ -175,7 +175,7 @@ def readImage(panel=None):
     # first save as png
     with fits.open(fitsfile) as f:
         data = f[0].data
-        plt.imsave(imgfile, data)
+        plt.imsave(imgfile, data, cmap = 'gist_ncar')
     # load in png and display
     img = ImageTk.PhotoImage(Image.open(imgfile))
     # check if image panel exists
