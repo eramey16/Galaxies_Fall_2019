@@ -16,13 +16,8 @@ from astropy.io import fits
 import os
 import subprocess
 
-### file paths
-tmp_path = ".galfit/" # folder for temporary files
-usr_parfile = None
-parfile = tmp_path+"galfit-example/EXAMPLE/galfit_test.feedme" # param file # maybe download from internet later
-original_parfile = tmp_path+"galfit-example/EXAMPLE/galfit.feedme" # parfile to reset if things go awry
-fitsfile = tmp_path+"imgblock.fits" # image file
-imgfile = tmp_path+"tmp_img.png"
+### my packages
+from file_ctrls import *
 
 ### global variables
 W = 5
@@ -120,7 +115,8 @@ class galfitObject:
         if self.type == 'sky':
             return
         self.label.grid(row=count, column=0, sticky='w')
-        self.button.grid(row = count, column=1, sticky='w')
+        if self.type != None:
+            self.button.grid(row = count, column=1, sticky='w')
         count += 1
         for param in self.params:
             param.grid()
@@ -143,15 +139,6 @@ class galfitObject:
         all_pars = all_pars[:self.startline]+all_pars[self.endline:]
         writeFile()
         reloadGUI()
-        
-            
-### ideas to fix spacing problem
-# instead of deleting whitespace when a write occurs, use a separate function for it and do it each save
-    # I'd have to check the space to the # for each thing
-    # then check whether the length of the new thing leaves at least one space between the # and it and delete or add in the extra
-    # then I'd save again
-    # to be really robust I'd save the original space to the # rather than the new one
-# reload objects from the array each time a write occurs - let's not
             
 ### function definitions
 def countOne():
@@ -180,25 +167,6 @@ def runGalfit():
     FNULL = open(os.devnull, 'w')
     p = checkPar()
     subprocess.call("./galfit "+p, shell=True, stdout=FNULL, stderr=subprocess.STDOUT)
-
-def checkPar():
-    if usr_parfile==None:
-        return parfile
-    else:
-        return usr_parfile
-
-def readFile():
-    global all_pars
-    p = checkPar()
-    
-    with open(p) as f:
-        all_pars = f.readlines()
-
-def writeFile():
-    global all_pars
-    p = checkPar()
-    with open(p, 'w') as f:
-        f.writelines(all_pars)
 
 def loadImage(panel=None):
     # save all object states
@@ -286,11 +254,17 @@ def makeCanvas():
 
     btnCanvas.configure(yscrollcommand=scrollbar.set)
     btnCanvas.bind('<Configure>', on_configure)
+    btnCanvas.bind_all('<MouseWheel>',lambda event : on_mousewheel(event))
     on_configure(0)
 
     btnFrame = Frame(btnCanvas)
     btnFrame.pack(side=LEFT, fill=BOTH)
     btn_id = btnCanvas.create_window((0,0), window=btnFrame, anchor='nw')
+
+def on_mousewheel(event):
+    global btnCanvas
+    #print(event)
+    btnCanvas.yview_scroll(-1*np.sign(event.delta), "units")
 
 def addButtons():
     global count
@@ -435,6 +409,7 @@ scrollbar.pack(side=RIGHT, fill=Y)
 
 btnCanvas.configure(yscrollcommand=scrollbar.set)
 btnCanvas.bind('<Configure>', on_configure)
+btnCanvas.bind_all('<MouseWheel>',lambda event : on_mousewheel(event))
 
 btnFrame = Frame(btnCanvas)
 btnFrame.pack(side=LEFT, fill=Y)
