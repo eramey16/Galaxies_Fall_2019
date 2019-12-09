@@ -18,6 +18,7 @@ import subprocess
 
 ### file paths
 tmp_path = ".galfit/" # folder for temporary files
+usr_parfile = None
 parfile = tmp_path+"galfit-example/EXAMPLE/galfit_test.feedme" # param file # maybe download from internet later
 original_parfile = tmp_path+"galfit-example/EXAMPLE/galfit.feedme" # parfile to reset if things go awry
 fitsfile = tmp_path+"imgblock.fits" # image file
@@ -177,16 +178,26 @@ def readImage(panel=None):
 def runGalfit():
     #print("run galfit called")
     FNULL = open(os.devnull, 'w')
-    subprocess.call("./galfit "+parfile, shell=True, stdout=FNULL, stderr=subprocess.STDOUT)
+    p = checkPar()
+    subprocess.call("./galfit "+p, shell=True, stdout=FNULL, stderr=subprocess.STDOUT)
+
+def checkPar():
+    if usr_parfile==None:
+        return parfile
+    else:
+        return usr_parfile
 
 def readFile():
     global all_pars
-    with open(parfile) as f:
+    p = checkPar()
+    
+    with open(p) as f:
         all_pars = f.readlines()
 
 def writeFile():
     global all_pars
-    with open(parfile, 'w') as f:
+    p = checkPar()
+    with open(p, 'w') as f:
         f.writelines(all_pars)
 
 def loadImage(panel=None):
@@ -340,7 +351,39 @@ def on_configure(event):
     # update scrollregion after starting 'mainloop'
     # when all widgets are in canvas
     btnCanvas.configure(scrollregion=btnCanvas.bbox('all'))
+    
+def saveParAs():
+    global usr_parfile
+    filename = filedialog.asksaveasfilename(title="Select file", filetypes=(("FEEDME file", "*.feedme"), ("All files", "*.*")))
+    p = checkPar()
+    subprocess.call(["cp", p, filename])
+    usr_parfile = filename
+    for obj in all_objects:
+        obj.saveAll()
 
+def saveImg():
+    filename = filedialog.asksaveasfilename(title="Select file", filetypes=(("FITS file","*.fits"),("PNG","*.png"), ("JPG", "*.jpg")))
+    if ".fits" in filename:
+        subprocess.call(["cp", fitsfile, filename])
+    else:
+        with fits.open(fitsfile) as f:
+            data = f[0].data
+            plt.imsave(filename, data)
+
+def loadPar():
+    global usr_parfile
+    filename = filedialog.askopenfilename(filetypes = (("FEEDME file","*.feedme"),("all files","*.*")))
+    usr_parfile = filename
+    reloadGUI()
+
+def savePar():
+    if usr_parfile==None:
+        saveParAs()
+    else:
+        for obj in all_objects:
+            obj.saveAll()
+    
+            
 ### main program
 
 # read in parameter file
@@ -400,7 +443,10 @@ btn_id = btnCanvas.create_window((0,0), window=btnFrame, anchor='nw')
 ### Create a menu
 menu = Menu(root)
 new_item = Menu(menu)
-new_item.add_command(label='New')
+new_item.add_command(label='Load parameter file', command=loadPar)
+new_item.add_command(label='Save parameter file', command=savePar)
+new_item.add_command(label='Save parameter file as', command=saveParAs)
+new_item.add_command(label="Save image file", command=saveImg)
 menu.add_cascade(label='File', menu=new_item)
 root.config(menu=menu)
 
