@@ -145,6 +145,7 @@ def countOne():
     count += 1
 
 def readImage(panel=None):
+    #print("read image called")
     # first save as png
     with fits.open(fitsfile) as f:
         data = f[0].data
@@ -158,10 +159,10 @@ def readImage(panel=None):
         panel.configure(image=img)
     # place in window
     panel.image = img
-    panel.place(relx=.3, rely=.3, anchor="center")
     return panel
 
 def runGalfit():
+    #print("run galfit called")
     FNULL = open(os.devnull, 'w')
     subprocess.call("./galfit "+parfile, shell=True, stdout=FNULL, stderr=subprocess.STDOUT)
 
@@ -321,12 +322,12 @@ root.title("Galfit GUI")
 root.geometry(winsize)
 
 # Frame for buttons
-btnFrame1 = Frame(root, width=winX/2, height=winY)
+btnFrame1 = Frame(root, width=winX/2)
 btnFrame1.pack(side=LEFT, fill=Y)
 #btnFrame.place(relx=0, rely=0, anchor="center")
 #btnFrame1.grid_propagate(0)
 # Frame for image
-imgFrame = Frame(root, width=winX/2, height=winY)
+imgFrame = Frame(root, width=winX/2)
 imgFrame.pack(side=RIGHT, fill=Y)
 #imgFrame.place(relx=.5, rely=0, anchor="center")
 #imgFrame.grid_propagate(0)
@@ -354,6 +355,7 @@ for obj in all_objects:
 # run galfit and load image
 runGalfit()
 panel = loadImage()
+panel.place(relx=.3, rely=.3, anchor="center")
 
 # set up a button to add an object
 addBtn = Button(btnFrame, text="Add an object", command=addObject)
