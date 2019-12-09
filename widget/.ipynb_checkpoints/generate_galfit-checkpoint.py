@@ -317,9 +317,8 @@ def addObject():
     
     # add buttons
     addButtons()
-    # run galfit and read image
-    runGalfit()
-    readImage()
+    # load new image
+    loadImage(panel)
 
 def on_configure(event):
     global btnCanvas
