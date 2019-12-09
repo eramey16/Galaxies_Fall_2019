@@ -36,15 +36,15 @@ all_objects = []
 all_buttons = []
 objTemplate = ['# Object number: 1\n',
         ' 0) sersic                 #  object type\n',
-        ' 1) 100         100   1 1  #  position x, y\n',
+        ' 1) 50          50    1 1  #  position x, y\n',
         ' 3) 2.0         1          #  Integrated magnitude\n',
         ' 4) 100         1          #  R_e (half-light radius)   [pix]\n',
         ' 5) 1           1          #  Sersic index n (de Vaucouleurs n=4) \n',
         ' 6) 0.0000      0          #     ----- \n',
         ' 7) 0.0000      0          #     ----- \n',
         ' 8) 0.0000      0          #     ----- \n',
-        ' 9) 1.75        1          #  axis ratio (b/a)  \n',
-        '10) -75.0       1          #  position angle (PA) [deg: Up=0, Left=90]\n',
+        ' 9) .5          1          #  axis ratio (b/a)  \n',
+        '10) 90          1          #  position angle (PA) [deg: Up=0, Left=90]\n',
         " Z) 0                      #  output option (0 = resid., 1 = Don't subtract) \n",
         '\n']
 
@@ -421,6 +421,6 @@ addBtn, refreshBtn = addButtons()
 # display the finished window
 root.mainloop()
 
-#subprocess.call(["cp", original_parfile, parfile])
+subprocess.call(["cp", original_parfile, parfile])
 
 #TODO - write a function so you can refresh the text of entries when galfit is run
