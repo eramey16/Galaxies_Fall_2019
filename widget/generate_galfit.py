@@ -4,6 +4,7 @@
 
 ### packages used
 # GUI interface
+from tkinter import Menu
 from tkinter import filedialog
 from tkinter import *
 from PIL import Image, ImageTk
@@ -111,12 +112,14 @@ class galfitObject:
         else:
             text = "Object "+str(self.num)+":"
         self.label = Label(btnFrame, text=text, font=titlefont)
+        self.button = Button(btnFrame, text="Remove object", command=lambda:self.remove())
     
     def gridAll(self):
         global count
         if self.type == 'sky':
             return
         self.label.grid(row=count, column=0, sticky='w')
+        self.button.grid(row = count, column=1, sticky='w')
         count += 1
         for param in self.params:
             param.grid()
@@ -130,6 +133,16 @@ class galfitObject:
         for param in self.params:
             param.save()
         writeFile()
+    
+    def remove(self):
+        global all_objects
+        global all_pars
+
+        all_objects.remove(self)
+        all_pars = all_pars[:self.startline]+all_pars[self.endline:]
+        writeFile()
+        reloadGUI()
+        
             
 ### ideas to fix spacing problem
 # instead of deleting whitespace when a write occurs, use a separate function for it and do it each save
@@ -284,12 +297,10 @@ def addButtons():
     
     return addBtn, refreshBtn
 
-def addObject():
+def reloadGUI():
     global all_pars
     global all_objects
-    global all_buttons
     global count
-    global scrollbar
     
     # remove current entries and buttons
     for obj in all_objects:
@@ -297,20 +308,13 @@ def addObject():
     
     # restart count
     count = 0
-    
     # refresh the canvas object
     makeCanvas()
     
-    # Make new object
-    objTemplate[0] = objTemplate[0][:-2]+str(all_objects[-1].num+1)+objTemplate[-1]
-    for line in objTemplate: # add it to parameters
-        all_pars.append(line)
-    writeFile()
-    
     # refresh params & objects
     all_pars = []
-    readFile()
     all_objects = []
+    readFile()
     readParams()
     for obj in all_objects:
         obj.gridAll()
@@ -319,6 +323,17 @@ def addObject():
     addButtons()
     # load new image
     loadImage(panel)
+
+def addObject():
+    global all_pars
+    
+    # Make new object
+    objTemplate[0] = objTemplate[0][:-2]+str(all_objects[-1].num+1)+objTemplate[-1]
+    for line in objTemplate: # add it to parameters
+        all_pars.append(line)
+    writeFile()
+    
+    reloadGUI()
 
 def on_configure(event):
     global btnCanvas
@@ -382,6 +397,13 @@ btnFrame = Frame(btnCanvas)
 btnFrame.pack(side=LEFT, fill=Y)
 btn_id = btnCanvas.create_window((0,0), window=btnFrame, anchor='nw')
 
+### Create a menu
+menu = Menu(root)
+new_item = Menu(menu)
+new_item.add_command(label='New')
+menu.add_cascade(label='File', menu=new_item)
+root.config(menu=menu)
+
 ### read in parameters
 readParams()
 
@@ -399,6 +421,6 @@ addBtn, refreshBtn = addButtons()
 # display the finished window
 root.mainloop()
 
-subprocess.call(["cp", original_parfile, parfile])
+#subprocess.call(["cp", original_parfile, parfile])
 
 #TODO - write a function so you can refresh the text of entries when galfit is run
