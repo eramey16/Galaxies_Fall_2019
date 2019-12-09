@@ -241,23 +241,65 @@ def changeOutfile(line, match):
     all_pars[line] = newline
     writeFile()
 
+def makeCanvas():
+    global btnFrame1
+    global btnFrame
+    global btnCanvas
+    
+    btnFrame1.destroy()
+    #btnCanvas.destroy()
+    #scrollbar.destroy()
+    
+    btnFrame1 = Frame(root, width=winX/2, height=winY)
+    btnFrame1.pack(side=LEFT, fill=BOTH)
+    # make canvas
+    btnCanvas = Canvas(btnFrame1)
+    btnCanvas.pack(side=LEFT, fill=BOTH)
+
+    ### set up the scroll bar
+    scrollbar = Scrollbar(btnFrame1, command=btnCanvas.yview)
+    scrollbar.pack(side=RIGHT, fill=Y, expand=True)
+
+    btnCanvas.configure(yscrollcommand=scrollbar.set)
+    btnCanvas.bind('<Configure>', on_configure)
+    on_configure(0)
+
+    btnFrame = Frame(btnCanvas)
+    btnFrame.pack(side=LEFT, fill=BOTH)
+    btn_id = btnCanvas.create_window((0,0), window=btnFrame, anchor='nw')
+
+def addButtons():
+    global count
+    global addBtn
+    global refreshBtn
+    
+    # set up a button to add an object
+    addBtn = Button(btnFrame, text="Add an object", command=addObject)
+    addBtn.grid(row=count, column=0)
+
+    # set up a button to refresh the image
+    refreshBtn = Button(btnFrame, text="Run Galfit!", command = lambda : loadImage(panel))
+    refreshBtn.grid(row=count, column=1)
+    count+=1
+    
+    return addBtn, refreshBtn
+
 def addObject():
     global all_pars
     global all_objects
     global all_buttons
     global count
-    
-    global addBtn
-    global refreshBtn
+    global scrollbar
     
     # remove current entries and buttons
     for obj in all_objects:
         obj.ungridAll()
-    addBtn.grid_remove()
-    refreshBtn.grid_remove()
     
     # restart count
     count = 0
+    
+    # refresh the canvas object
+    makeCanvas()
     
     # Make new object
     objTemplate[0] = objTemplate[0][:-2]+str(all_objects[-1].num+1)+objTemplate[-1]
@@ -273,19 +315,14 @@ def addObject():
     for obj in all_objects:
         obj.gridAll()
     
-    addBtn.grid(row=count, column=0)
-    refreshBtn.grid(row=count, column=1)
-    count += 1
-        
-    on_configure(0)
-
-    all_buttons.append(addBtn)
-    all_buttons.append(refreshBtn)
-
+    # add buttons
+    addButtons()
+    # run galfit and read image
     runGalfit()
     readImage()
 
 def on_configure(event):
+    global btnCanvas
     # update scrollregion after starting 'mainloop'
     # when all widgets are in canvas
     btnCanvas.configure(scrollregion=btnCanvas.bbox('all'))
@@ -322,28 +359,29 @@ root.title("Galfit GUI")
 root.geometry(winsize)
 
 # Frame for buttons
-btnFrame1 = Frame(root, width=winX/2)
+btnFrame1 = Frame(root, width=winX/2, height=winY)
 btnFrame1.pack(side=LEFT, fill=Y)
 #btnFrame.place(relx=0, rely=0, anchor="center")
 #btnFrame1.grid_propagate(0)
 # Frame for image
-imgFrame = Frame(root, width=winX/2)
+imgFrame = Frame(root, width=winX/2, height=winY)
 imgFrame.pack(side=RIGHT, fill=Y)
 #imgFrame.place(relx=.5, rely=0, anchor="center")
 #imgFrame.grid_propagate(0)
 
 btnCanvas = Canvas(btnFrame1)
-btnCanvas.pack(side=LEFT, fill=Y)
+btnCanvas.pack(side=LEFT, fill=BOTH)
 
-scrollbar = Scrollbar(root, command=btnCanvas.yview)
+### set up the scroll bar
+scrollbar = Scrollbar(btnFrame1, command=btnCanvas.yview)
 scrollbar.pack(side=RIGHT, fill=Y)
 
-btnCanvas.configure(yscrollcommand = scrollbar.set)
+btnCanvas.configure(yscrollcommand=scrollbar.set)
 btnCanvas.bind('<Configure>', on_configure)
 
 btnFrame = Frame(btnCanvas)
-btnCanvas.create_window((0,0), window=btnFrame, anchor='nw')
-
+btnFrame.pack(side=LEFT, fill=Y)
+btn_id = btnCanvas.create_window((0,0), window=btnFrame, anchor='nw')
 
 ### read in parameters
 readParams()
@@ -357,17 +395,7 @@ runGalfit()
 panel = loadImage()
 panel.place(relx=.3, rely=.3, anchor="center")
 
-# set up a button to add an object
-addBtn = Button(btnFrame, text="Add an object", command=addObject)
-addBtn.grid(row=count, column=0)
-
-# set up a button to refresh the image
-refreshBtn = Button(btnFrame, text="Run Galfit!", command = lambda : loadImage(panel))
-refreshBtn.grid(row=count, column=1)
-count+=1
-
-all_buttons.append(addBtn)
-all_buttons.append(refreshBtn)
+addBtn, refreshBtn = addButtons()
 
 # display the finished window
 root.mainloop()
