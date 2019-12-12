@@ -189,7 +189,7 @@ def runGalfit():
     #print("run galfit called")
     FNULL = open(os.devnull, 'w')
     p = checkPar()
-    subprocess.call("./galfit "+p, shell=True, stdout=FNULL, stderr=subprocess.STDOUT)
+    subprocess.call("galfit "+p, shell=True, stdout=FNULL, stderr=subprocess.STDOUT)
 
 def loadImage(panel=None):
     # save all object states
