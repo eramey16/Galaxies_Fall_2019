@@ -119,7 +119,7 @@ class galfitObject:
     def gridAll(self):
         global count
         self.label.grid(row=count, column=0, sticky='w')
-        if self.type != None:
+        if self.type != None and self.type != "sky":
             self.button.grid(row = count, column=1, sticky='w')
         count += 1
         for param in self.params:
