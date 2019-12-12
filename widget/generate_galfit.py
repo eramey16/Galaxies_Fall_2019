@@ -17,7 +17,7 @@ import os
 import subprocess
 
 ### frontend global variables
-W = 5
+W = 8
 winX = 1000
 winY = 1000
 winsize = str(winX)+"x"+str(winY)
@@ -57,7 +57,7 @@ class paramObject: # holds a parameter
         self.text = text # text for label
         self.line = line # line in parfile
         self.start = match.span(1)[0] # starting index in line
-        self.end = match.span(2)[0]
+        self.end = match.span(2)[0]-1
         self.end_min = self.end
         self.obj = obj # object referenced
         self.prevVal = self.val
@@ -114,12 +114,10 @@ class galfitObject:
         else:
             text = "Object "+str(self.num)+":"
         self.label = Label(btnFrame, text=text, font=titlefont)
-        self.button = Button(btnFrame, text="Remove object", command=lambda:self.remove())
+        self.button = Button(btnFrame, text="Remove", command=lambda:self.remove())
     
     def gridAll(self):
         global count
-        if self.type == 'sky':
-            return
         self.label.grid(row=count, column=0, sticky='w')
         if self.type != None:
             self.button.grid(row = count, column=1, sticky='w')
@@ -203,6 +201,16 @@ def loadImage(panel=None):
     # reload the image
     return readImage(panel)
 
+# generates regular expressions for parfile
+def genLine(num, numVals=2, select=1):
+    numstring = str(num)+"\) "
+    for i in range(1,numVals+1):
+        if i==select or i==select+1:
+            numstring+="(\S+)\s+"
+        else:
+            numstring+="\S+\s+"
+    return numstring+"(#)"
+
 # generates a line matching select value of numVals parameters
 # num is the line number
 def readParams():
@@ -232,25 +240,17 @@ def readParams():
                 # check if it's an object type
                 if val in object_types:
                     obj.type = val
+                
+                # check for double-match
+                if genLine(3) in key and obj.type=='sky':
+                    continue
 
                 # set up parameter object for UI
-                if obj.type=='sky':
-                    continue
                 param_obj = paramObject(param_matches[key]+":", match, i, obj)
+                if obj.type=="sky" and val in object_types:
+                    param_obj.entry.configure(state="disabled")
             
                 obj.params.append(param_obj)
-    
-def genLine(num, numVals=2, select=1):
-    numstring = str(num)+"\) "
-    for i in range(1,numVals+1):
-        if i==select or i==select+1:
-            numstring+="(\S+)\s+"
-        else:
-            numstring+="\S+\s+"
-        
-    if select==numVals:
-        numstring+="(\S+)"
-    return numstring
     
 def changeOutfile(line, match):
     start, end = match.span(1)
@@ -404,7 +404,8 @@ param_matches = {
     " "+genLine(4): "Half-light radius (pix)",
     " "+genLine(5): "Sersic index",
     " "+genLine(9): "Axis ratio (b/a)",
-    genLine(10): "Position angle"
+    genLine(10): "Position angle",
+    " "+genLine(1): "Sky background (at center)"
 }
 
 object_types = ["sersic", "expdisk", "sky"]
@@ -454,8 +455,7 @@ root.config(menu=menu)
 readParams()
 
 for obj in all_objects:
-    if obj.type != "sky":
-        obj.gridAll()
+    obj.gridAll()
 
 # run galfit and load image
 runGalfit()
@@ -463,6 +463,8 @@ panel = loadImage()
 panel.place(relx=.3, rely=.3, anchor="center")
 
 addBtn, refreshBtn = addButtons()
+
+root.bind_all('<Return>', lambda event : loadImage(panel))
 
 # display the finished window
 root.mainloop()
